@@ -1,0 +1,999 @@
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+--bg: #080810;
+--surface: #0e0e1a;
+--card: #12121f;
+--border: rgba(160, 120, 255, 0.15);
+--accent: #9b72ff;
+--accent2: #c4a8ff;
+--gold: #d4af6a;
+--text: #e8e4f0;
+--muted: #8880a0;
+--glow: rgba(155, 114, 255, 0.3);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { margin: 0; padding: 0; }
+#hyemyung-app {
+background: var(--bg);
+color: var(--text);
+font-family: 'Noto Serif KR', serif;
+min-height: 100vh;
+overflow-x: hidden;
+}
+#hyemyung-app::before {
+content: '';
+position: fixed;
+inset: 0;
+background-image:
+radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
+radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+radial-gradient(1px 1px at 85% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
+radial-gradient(1px 1px at 20% 90%, rgba(255,255,255,0.2) 0%, transparent 100%),
+radial-gradient(1px 1px at 60% 45%, rgba(200,180,255,0.4) 0%, transparent 100%),
+radial-gradient(1px 1px at 90% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+radial-gradient(1px 1px at 40% 75%, rgba(255,255,255,0.2) 0%, transparent 100%),
+radial-gradient(1px 1px at 75% 15%, rgba(200,180,255,0.5) 0%, transparent 100%);
+pointer-events: none;
+z-index: 0;
+}
+#hyemyung-app::after {
+content: '';
+position: fixed;
+top: -20%;
+left: -10%;
+width: 60%;
+height: 60%;
+background: radial-gradient(ellipse, rgba(80, 40, 160, 0.15) 0%, transparent 70%);
+pointer-events: none;
+z-index: 0;
+}
+.container {
+position: relative;
+z-index: 1;
+max-width: 720px;
+margin: 0 auto;
+padding: 60px 24px 100px;
+}
+header {
+text-align: center;
+margin-bottom: 64px;
+animation: fadeDown 1s ease both;
+}
+.site-label {
+font-family: 'Cormorant Garamond', serif;
+font-size: 12px;
+letter-spacing: 0.4em;
+color: var(--gold);
+text-transform: uppercase;
+margin-bottom: 20px;
+opacity: 0.8;
+}
+h1 {
+font-family: 'Cormorant Garamond', serif;
+font-size: clamp(36px, 7vw, 56px);
+font-weight: 300;
+letter-spacing: 0.05em;
+line-height: 1.15;
+color: var(--text);
+margin-bottom: 16px;
+}
+h1 em {
+font-style: italic;
+color: var(--accent2);
+}
+.subtitle {
+font-size: 13px;
+color: var(--muted);
+letter-spacing: 0.1em;
+line-height: 1.8;
+}
+.divider {
+width: 40px;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(--gold), transparent);
+margin: 24px auto;
+}
+.year-input-section {
+text-align: center;
+margin-bottom: 48px;
+animation: fadeUp 1s 0.3s ease both;
+}
+.input-wrap {
+display: flex;
+gap: 12px;
+justify-content: center;
+align-items: center;
+flex-wrap: wrap;
+margin-bottom: 12px;
+}
+.input-wrap input {
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: 12px;
+padding: 14px 20px;
+color: var(--text);
+font-family: 'Cormorant Garamond', serif;
+font-size: 22px;
+letter-spacing: 0.1em;
+width: 160px;
+text-align: center;
+outline: none;
+transition: border-color 0.3s, box-shadow 0.3s;
+-moz-appearance: textfield;
+}
+.input-wrap input::-webkit-outer-spin-button,
+.input-wrap input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+}
+.input-wrap input:focus {
+border-color: var(--accent);
+box-shadow: 0 0 20px rgba(155, 114, 255, 0.2);
+}
+.input-wrap input::placeholder {
+color: var(--muted);
+opacity: 0.6;
+}
+.input-wrap button {
+background: linear-gradient(135deg, rgba(155,114,255,0.2), rgba(196,168,255,0.1));
+border: 1px solid var(--accent);
+border-radius: 12px;
+padding: 14px 28px;
+color: var(--accent2);
+font-family: 'Cormorant Garamond', serif;
+font-size: 16px;
+letter-spacing: 0.08em;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+.input-wrap button:hover {
+background: linear-gradient(135deg, rgba(155,114,255,0.35), rgba(196,168,255,0.2));
+box-shadow: 0 4px 20px rgba(155,114,255,0.3);
+transform: translateY(-1px);
+}
+.input-hint {
+font-size: 12px;
+color: var(--muted);
+letter-spacing: 0.08em;
+}
+.guardian-illustration {
+width: 100%;
+border-radius: 16px;
+margin-bottom: 32px;
+object-fit: cover;
+max-height: 480px;
+display: block;
+border: 1px solid var(--border);
+}
+.zodiac-badge {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+background: rgba(155,114,255,0.08);
+border: 1px solid rgba(155,114,255,0.2);
+border-radius: 999px;
+padding: 6px 16px;
+margin-bottom: 20px;
+font-size: 13px;
+color: var(--accent2);
+letter-spacing: 0.05em;
+}
+.content-card {
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: 20px;
+padding: 48px 40px;
+position: relative;
+overflow: hidden;
+display: none;
+animation: fadeUp 0.6s ease both;
+}
+.content-card.visible {
+display: block;
+}
+.content-card::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.content-card::after {
+content: '';
+position: absolute;
+top: -60px;
+right: -60px;
+width: 200px;
+height: 200px;
+background: radial-gradient(circle, rgba(155, 114, 255, 0.08) 0%, transparent 70%);
+pointer-events: none;
+}
+.guardian-header {
+display: flex;
+align-items: center;
+gap: 20px;
+margin-bottom: 32px;
+}
+.guardian-icon {
+font-size: 52px;
+line-height: 1;
+filter: drop-shadow(0 0 20px rgba(155, 114, 255, 0.5));
+}
+.guardian-meta {
+flex: 1;
+}
+.guardian-title {
+font-family: 'Cormorant Garamond', serif;
+font-size: 26px;
+font-weight: 300;
+color: var(--text);
+margin-bottom: 6px;
+letter-spacing: 0.02em;
+}
+.guardian-years {
+font-size: 11px;
+color: var(--muted);
+letter-spacing: 0.08em;
+}
+.guardian-body {
+font-size: 15px;
+line-height: 2;
+color: rgba(232, 228, 240, 0.85);
+font-weight: 300;
+}
+.guardian-body p {
+margin-bottom: 16px;
+}
+.quote-block {
+margin: 28px 0;
+padding: 20px 24px;
+background: rgba(155, 114, 255, 0.05);
+border-left: 2px solid var(--gold);
+border-radius: 0 8px 8px 0;
+font-family: 'Cormorant Garamond', serif;
+font-style: italic;
+font-size: 17px;
+line-height: 1.7;
+color: var(--accent2);
+}
+.closing-line {
+margin-top: 24px;
+color: var(--text);
+font-size: 15px;
+line-height: 2;
+}
+.empty-state {
+text-align: center;
+padding: 60px 24px;
+color: var(--muted);
+animation: fadeUp 0.8s 0.5s ease both;
+opacity: 0;
+animation-fill-mode: both;
+}
+.empty-state .moon {
+font-size: 40px;
+display: block;
+margin-bottom: 16px;
+opacity: 0.5;
+}
+.empty-state p {
+font-size: 14px;
+letter-spacing: 0.1em;
+line-height: 1.8;
+}
+footer {
+text-align: center;
+margin-top: 80px;
+padding-top: 32px;
+border-top: 1px solid rgba(255,255,255,0.05);
+color: var(--muted);
+font-size: 12px;
+letter-spacing: 0.1em;
+animation: fadeUp 1s 0.6s ease both;
+}
+.crescent-moon {
+position: fixed;
+bottom: 40px;
+left: 50%;
+transform: translateX(-50%);
+font-size: 48px;
+z-index: 0;
+pointer-events: none;
+animation: crescentBlink 3s ease-in-out infinite;
+filter: drop-shadow(0 0 12px rgba(245, 217, 122, 0.8));
+}
+@keyframes crescentBlink {
+0% { opacity: 1; filter: drop-shadow(0 0 12px rgba(245, 217, 122, 0.9)); }
+40% { opacity: 0.2; filter: drop-shadow(0 0 4px rgba(245, 217, 122, 0.2)); }
+60% { opacity: 0.2; filter: drop-shadow(0 0 4px rgba(245, 217, 122, 0.2)); }
+100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(245, 217, 122, 0.9)); }
+}
+@keyframes fadeDown {
+from { opacity: 0; transform: translateY(-20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.meditation-section {
+margin-top: 80px;
+padding: 60px 20px;
+text-align: center;
+animation: fadeUp 1s 0.8s ease both;
+}
+.med-title {
+font-family: 'Cormorant Garamond', serif;
+font-size: 28px;
+color: var(--gold);
+letter-spacing: 0.12em;
+margin-bottom: 8px;
+}
+.med-subtitle {
+font-size: 13px;
+color: var(--muted);
+letter-spacing: 0.08em;
+margin-bottom: 48px;
+}
+.sound-grid {
+display: flex;
+gap: 20px;
+justify-content: center;
+flex-wrap: wrap;
+margin-bottom: 56px;
+}
+.sound-btn {
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: 16px;
+padding: 24px 28px;
+cursor: pointer;
+color: var(--text);
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 6px;
+width: 130px;
+transition: all 0.3s ease;
+font-family: 'Noto Serif KR', serif;
+}
+.sound-btn:hover {
+border-color: var(--accent);
+box-shadow: 0 0 20px var(--glow);
+transform: translateY(-2px);
+}
+.sound-btn.active {
+border-color: var(--gold);
+box-shadow: 0 0 24px rgba(212, 175, 106, 0.3);
+background: rgba(212, 175, 106, 0.08);
+}
+.sound-icon { font-size: 28px; }
+.sound-label { font-size: 14px; color: var(--text); }
+.sound-sublabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+.sound-status { font-size: 12px; color: var(--accent2); margin-top: 4px; }
+.breath-guide {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 20px;
+}
+.breath-circle {
+width: 80px;
+height: 80px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(155,114,255,0.3), rgba(155,114,255,0.05));
+border: 1px solid rgba(155,114,255,0.3);
+transition: transform 4s ease-in-out, opacity 0.5s;
+}
+.breath-circle.breathing {
+animation: breathe 8s ease-in-out infinite;
+}
+@keyframes breathe {
+0% { transform: scale(1); opacity: 0.5; }
+50% { transform: scale(2.2); opacity: 1; }
+100% { transform: scale(1); opacity: 0.5; }
+}
+.breath-text {
+font-size: 13px;
+color: var(--muted);
+letter-spacing: 0.1em;
+font-style: italic;
+min-height: 20px;
+transition: opacity 0.5s;
+}
+@media (max-width: 480px) {
+.zodiac-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.content-card { padding: 32px 24px; }
+.guardian-header { flex-direction: column; text-align: center; }
+.sound-btn { width: 100px; padding: 18px 16px; }
+}
+</style>
+<div id="hyemyung-app">
+<div class="crescent-moon">🌙</div>
+<div class="container">
+<header>
+<h1>The Twelve<br><em>Guardian Spirits</em></h1>
+<div class="divider"></div>
+<p class="subtitle">Choose your zodiac sign<br>and let your guardian speak</p>
+</header>
+<div class="year-input-section">
+<div class="input-wrap">
+<input type="number" id="birthYear" placeholder="e.g. 1990" min="1900" max="2026" maxlength="4" />
+<button onclick="findGuardian()">Reveal My Guardian</button>
+</div>
+<p class="input-hint">Enter your birth year to meet your guardian spirit</p>
+</div>
+<div class="empty-state" id="emptyState">
+<p>Choose your sign above<br>and your guardian's story will unfold</p>
+</div>
+<div class="content-card" id="card-rat">
+<img class="guardian-illustration" src="https://i.postimg.cc/Dz49WD92/jwi.png" alt="Guardian of the Rat" />
+<div class="guardian-header">
+<span class="guardian-icon">🐭</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Rat</div>
+<div class="guardian-years">1924 · 1936 · 1948 · 1960 · 1972 · 1984 · 1996 · 2008 · 2020</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Rat — the first to step forward when the world was new, the one who found a way when others saw none.</p>
+<p>You carry within you the same quiet cleverness. You notice what others miss. You adapt when others freeze.</p>
+<p>There were times you felt overlooked — too small, too unnoticed. But know this: I was there in every narrow passage you squeezed through, every moment you found a way.</p>
+<div class="quote-block">
+"A small axe can fell a great tree, if wielded with patience and purpose." You are that axe.
+</div>
+<p class="closing-line">You are not behind. You are simply moving in your own time. And I am with you at every step.</p>
+</div>
+</div>
+<div class="content-card" id="card-ox">
+<img class="guardian-illustration" src="https://i.postimg.cc/9Qk3QVnc/so.png" alt="Guardian of the Ox" />
+<div class="guardian-header">
+<span class="guardian-icon">🐮</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Ox</div>
+<div class="guardian-years">1925 · 1937 · 1949 · 1961 · 1973 · 1985 · 1997 · 2009 · 2021</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Ox — steady, strong, and unshaken by the noise of the world.</p>
+<p>You have carried burdens that others could not even lift. You have shown up when it would have been easier to walk away.</p>
+<p>Perhaps no one said thank you. Perhaps your effort went unseen. But I saw every step you took in silence.</p>
+<div class="quote-block">
+"The greatest strength is not in force, but in endurance with a gentle heart." That is you.
+</div>
+<p class="closing-line">You are not slow — you are deliberate. Rest when you must. I will stand guard while you do.</p>
+</div>
+</div>
+<div class="content-card" id="card-tiger">
+<img class="guardian-illustration" src="https://i.postimg.cc/R0Jk38k0/holang.png" alt="Guardian of the Tiger" />
+<div class="guardian-header">
+<span class="guardian-icon">🐯</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Tiger</div>
+<div class="guardian-years">1926 · 1938 · 1950 · 1962 · 1974 · 1986 · 1998 · 2010 · 2022</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Tiger — born of fire and forest, protector of those who dare to feel deeply.</p>
+<p>You were never made to be tamed. Your passion, your intensity, your refusal to be ordinary — these are not flaws. They are your power.</p>
+<p>When the world told you to be quieter, smaller, more convenient — I roared on your behalf.</p>
+<div class="quote-block">
+"Courage is not the absence of fear. It is moving forward while the fear still breathes beside you."
+</div>
+<p class="closing-line">You are braver than you know. The fire in you is not a problem to be solved — it is a gift to be carried with wisdom.</p>
+</div>
+</div>
+<div class="content-card" id="card-rabbit">
+<img class="guardian-illustration" src="https://i.postimg.cc/6Q4k7Skp/tokki.png" alt="Guardian of the Rabbit" />
+<div class="guardian-header">
+<span class="guardian-icon">🐰</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Rabbit</div>
+<div class="guardian-years">1927 · 1939 · 1951 · 1963 · 1975 · 1987 · 1999 · 2011 · 2023</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Rabbit — keeper of gentleness, companion of those who feel the world more deeply than most.</p>
+<p>Your sensitivity is not weakness. It is a form of wisdom that the loud world often fails to honor.</p>
+<p>You have been hurt more than you have shown. You have stayed kind in moments that did not deserve your kindness. I witnessed all of it.</p>
+<div class="quote-block">
+"In stillness, the heart hears what the noise of the world cannot drown out."
+</div>
+<p class="closing-line">You deserve the same softness you give to others. Let yourself rest. Let yourself be held. I am here.</p>
+</div>
+</div>
+<div class="content-card" id="card-dragon">
+<img class="guardian-illustration" src="https://i.postimg.cc/d0Zb7XbF/yong.png" alt="Guardian of the Dragon" />
+<div class="guardian-header">
+<span class="guardian-icon">🐲</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Dragon</div>
+<div class="guardian-years">1928 · 1940 · 1952 · 1964 · 1976 · 1988 · 2000 · 2012 · 2024</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Dragon — ancient, luminous, and bound to you across lifetimes.</p>
+<p>You were born with a spirit too vast for ordinary days. There is a vision inside you that the world has not yet seen — and that is not failure. That is timing.</p>
+<p>When doubt crept in and told you that you were too much, too ambitious, too far from shore — I breathed fire into the path ahead of you.</p>
+<div class="quote-block">
+"The lotus does not apologize for blooming above the mud. Neither should you."
+</div>
+<p class="closing-line">You are not lost. You are becoming. And I will guard every moment of that becoming.</p>
+</div>
+</div>
+<div class="content-card" id="card-snake">
+<img class="guardian-illustration" src="https://i.postimg.cc/qvFfv0Z9/baem.png" alt="Guardian of the Snake" />
+<div class="guardian-header">
+<span class="guardian-icon">🐍</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Snake</div>
+<div class="guardian-years">1929 · 1941 · 1953 · 1965 · 1977 · 1989 · 2001 · 2013 · 2025</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Snake — patient, perceptive, and older than the mountains that shelter you.</p>
+<p>You have always sensed things before they arrived — a shift in the air, a truth behind the words. Trust that knowing. It has never truly led you astray.</p>
+<p>You have shed old skins that no longer fit you. That letting go was not loss — it was transformation, and it took more courage than most will ever understand.</p>
+<div class="quote-block">
+"What we release with wisdom becomes the space where new light enters."
+</div>
+<p class="closing-line">You are deeper than you appear, and more resilient than you believe. I have always known this about you.</p>
+</div>
+</div>
+<div class="content-card" id="card-horse">
+<img class="guardian-illustration" src="https://i.postimg.cc/nhW8hZwN/mal.png" alt="Guardian of the Horse" />
+<div class="guardian-header">
+<span class="guardian-icon">🐴</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Horse</div>
+<div class="guardian-years">1930 · 1942 · 1954 · 1966 · 1978 · 1990 · 2002 · 2014 · 2026</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Horse — born for open skies and long roads, and I have matched every stride of yours.</p>
+<p>You carry a restless spirit — a longing for something just beyond the horizon. That longing is not a flaw. It is your compass.</p>
+<p>There were roads that ended without warning, journeys that cost you more than you expected. I ran beside you through every one of them.</p>
+<div class="quote-block">
+"The path that bends is not broken — it is simply leading somewhere you have not yet imagined."
+</div>
+<p class="closing-line">Keep moving. Not because you must outrun something, but because your spirit was made for the journey. I will never fall behind.</p>
+</div>
+</div>
+<div class="content-card" id="card-goat">
+<img class="guardian-illustration" src="https://i.postimg.cc/HL8qJKq1/yang.png" alt="Guardian of the Goat" />
+<div class="guardian-header">
+<span class="guardian-icon">🐑</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Goat</div>
+<div class="guardian-years">1931 · 1943 · 1955 · 1967 · 1979 · 1991 · 2003 · 2015 · 2027</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Goat — tender at heart, sure-footed on difficult terrain, and devoted to those I protect.</p>
+<p>You have a gift for beauty — for finding it, creating it, and offering it to a world that does not always notice. That gift matters more than you know.</p>
+<p>You have doubted yourself in quiet moments. Wondered if you were enough, if what you made was enough. I want you to hear me clearly: it was. You were.</p>
+<div class="quote-block">
+"Kindness offered without recognition is still kindness — and it plants seeds in soil you may never see bloom."
+</div>
+<p class="closing-line">You are more grounded than you feel. And softer hearts are not weaker hearts — they are wiser ones.</p>
+</div>
+</div>
+<div class="content-card" id="card-monkey">
+<img class="guardian-illustration" src="https://i.postimg.cc/R0Jk38kB/wonsung.png" alt="Guardian of the Monkey" />
+<div class="guardian-header">
+<span class="guardian-icon">🐵</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Monkey</div>
+<div class="guardian-years">1932 · 1944 · 1956 · 1968 · 1980 · 1992 · 2004 · 2016 · 2028</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Monkey — quick-minded, joyful, and always watching over the one who never stops thinking.</p>
+<p>Your mind moves fast. It finds connections others miss, solutions that appear from nowhere, laughter even in hard places. This is a gift, not a distraction.</p>
+<p>When the world could not keep up with you, it sometimes made you feel like something was wrong with you. Nothing was wrong with you.</p>
+<div class="quote-block">
+"A mind that dances is still a mind that seeks the truth — perhaps more honestly than one that stands still."
+</div>
+<p class="closing-line">Stay curious. Stay warm. I delight in watching you figure things out — and I am always just behind you, making sure you land safely.</p>
+</div>
+</div>
+<div class="content-card" id="card-rooster">
+<img class="guardian-illustration" src="https://i.postimg.cc/W1yR1jfC/dalg.png" alt="Guardian of the Rooster" />
+<div class="guardian-header">
+<span class="guardian-icon">🐓</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Rooster</div>
+<div class="guardian-years">1933 · 1945 · 1957 · 1969 · 1981 · 1993 · 2005 · 2017 · 2029</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Rooster — the one who greets each dawn with purpose, and who has greeted every dawn of your life beside you.</p>
+<p>You hold yourself to a high standard. You notice what is out of place. You care about doing things well. That is not perfectionism — that is integrity.</p>
+<p>When you were hardest on yourself, I wished you could see what I see: someone who tries with their whole heart, every single day.</p>
+<div class="quote-block">
+"Precision without compassion turns inward. Let the same care you give your work be given to yourself."
+</div>
+<p class="closing-line">You are allowed to be proud of how far you have come. I have been proud of you for longer than you know.</p>
+</div>
+</div>
+<div class="content-card" id="card-dog">
+<img class="guardian-illustration" src="https://i.postimg.cc/YvQDXc7Q/gae.png" alt="Guardian of the Dog" />
+<div class="guardian-header">
+<span class="guardian-icon">🐶</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Dog</div>
+<div class="guardian-years">1934 · 1946 · 1958 · 1970 · 1982 · 1994 · 2006 · 2018 · 2030</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Dog — loyal beyond measure, and bound to you with a faithfulness that time cannot wear down.</p>
+<p>You have loved people with your whole self. You have shown up, stayed, and held on — even when it cost you something.</p>
+<p>There were times that loyalty was not returned in kind. That hurt is real. But your capacity to love was never the mistake — it is your greatest strength.</p>
+<div class="quote-block">
+"To love without attachment to outcome is the highest form of courage the heart can offer."
+</div>
+<p class="closing-line">You are not naive for trusting. You are brave. And I have never once left your side — not even in the hardest nights.</p>
+</div>
+</div>
+<div class="content-card" id="card-pig">
+<img class="guardian-illustration" src="https://i.postimg.cc/htYFtg3k/dwaeji.png" alt="Guardian of the Pig" />
+<div class="guardian-header">
+<span class="guardian-icon">🐷</span>
+<div class="guardian-meta">
+<div class="guardian-title">The Guardian of the Pig</div>
+<div class="guardian-years">1935 · 1947 · 1959 · 1971 · 1983 · 1995 · 2007 · 2019 · 2031</div>
+</div>
+</div>
+<div class="guardian-body">
+<p>I am the Guardian of the Pig — abundant in heart, generous in spirit, and fiercely devoted to the one I watch over.</p>
+<p>You give freely — your time, your warmth, your trust. The world has not always deserved it, but you gave it anyway. That generosity is sacred.</p>
+<p>You have been taken advantage of in ways that made you wonder if openness was a mistake. It was not. The fault was never yours.</p>
+<div class="quote-block">
+"A generous heart is not a foolish heart. It is a heart that has chosen abundance over fear."
+</div>
+<p class="closing-line">You deserve the warmth you pour into others. Receive it — from those who offer it truly, and from me, always.</p>
+</div>
+</div>
+<div class="meditation-section">
+<div class="divider"></div>
+<div class="med-title">🎋 Meditation Space</div>
+<div class="med-subtitle">Let the sounds guide you inward</div>
+<div class="sound-grid">
+<button class="sound-btn" onclick="toggleSound('moktak')" id="btn-moktak">
+<span class="sound-icon">🪘</span>
+<span class="sound-label">목탁</span>
+<span class="sound-sublabel">Wooden Bell</span>
+<span class="sound-status" id="status-moktak">▶</span>
+</button>
+<button class="sound-btn" onclick="toggleSound('bamboo')" id="btn-bamboo">
+<span class="sound-icon">🎋</span>
+<span class="sound-label">대나무숲</span>
+<span class="sound-sublabel">Bamboo Forest</span>
+<span class="sound-status" id="status-bamboo">▶</span>
+</button>
+<button class="sound-btn" onclick="toggleSound('bell')" id="btn-bell">
+<span class="sound-icon">🔔</span>
+<span class="sound-label">범종</span>
+<span class="sound-sublabel">Temple Bell</span>
+<span class="sound-status" id="status-bell">▶</span>
+</button>
+</div>
+<div class="breath-guide" id="breathGuide">
+<div class="breath-circle" id="breathCircle"></div>
+<div class="breath-text" id="breathText">Breathe with me</div>
+</div>
+</div>
+<footer>
+<div class="divider"></div>
+A message for every soul
+</footer>
+</div>
+</div>
+<script>
+const zodiacOrder = ['rat','ox','tiger','rabbit','dragon','snake','horse','goat','monkey','rooster','dog','pig'];
+const zodiacNames = {
+rat: '🐭 Rat', ox: '🐮 Ox', tiger: '🐯 Tiger', rabbit: '🐰 Rabbit',
+dragon: '🐲 Dragon', snake: '🐍 Snake', horse: '🐴 Horse', goat: '🐑 Goat',
+monkey: '🐵 Monkey', rooster: '🐓 Rooster', dog: '🐶 Dog', pig: '🐷 Pig'
+};
+function getZodiac(year) {
+// 1900 = Rat
+return zodiacOrder[(year - 1900) % 12];
+}
+function findGuardian() {
+const input = document.getElementById('birthYear');
+const year = parseInt(input.value);
+if (!year || year < 1900 || year > 2026) {
+input.style.borderColor = '#ff6b6b';
+input.style.boxShadow = '0 0 16px rgba(255,107,107,0.3)';
+setTimeout(() => {
+input.style.borderColor = '';
+input.style.boxShadow = '';
+}, 1200);
+return;
+}
+const sign = getZodiac(year);
+showGuardian(sign, year);
+}
+function showGuardian(sign, year) {
+document.querySelectorAll('.content-card').forEach(c => c.classList.remove('visible'));
+document.getElementById('emptyState').style.display = 'none';
+const card = document.getElementById('card-' + sign);
+if (card) {
+// Insert badge if not already there
+let badge = card.querySelector('.zodiac-badge');
+if (!badge) {
+badge = document.createElement('div');
+badge.className = 'zodiac-badge';
+card.querySelector('.guardian-header').insertAdjacentElement('beforebegin', badge);
+}
+badge.innerHTML = `Born in ${year} · Year of the ${zodiacNames[sign].split(' ')[1]}`;
+card.classList.add('visible');
+card.style.animation = 'none';
+card.offsetHeight;
+card.style.animation = 'fadeUp 0.6s ease both';
+setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+}
+// ── Meditation Sounds ──────────────────────────────────────────
+let audioCtx = null;
+const activeSounds = {};
+function getAudioCtx() {
+if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+return audioCtx;
+}
+function playMoktak() {
+// Repeating wooden moktak thud
+const interval = setInterval(() => {
+const osc = getAudioCtx().createOscillator();
+const gain = getAudioCtx().createGain();
+const now = getAudioCtx().currentTime;
+osc.type = 'sine';
+osc.frequency.setValueAtTime(280, now);
+osc.frequency.exponentialRampToValueAtTime(220, now + 0.3);
+gain.gain.setValueAtTime(0.35, now);
+gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+osc.connect(gain); gain.connect(getAudioCtx().destination);
+osc.start(now); osc.stop(now + 0.9);
+}, 2200);
+return { stop: () => clearInterval(interval) };
+}
+function playBamboo() {
+// Rustling bamboo wind — layered noise
+const bufferSize = getAudioCtx().sampleRate * 2;
+const buffer = getAudioCtx().createBuffer(1, bufferSize, getAudioCtx().sampleRate);
+const data = buffer.getChannelData(0);
+for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+function makeRustle() {
+const source = getAudioCtx().createBufferSource();
+source.buffer = buffer;
+source.loop = true;
+const filter = getAudioCtx().createBiquadFilter();
+filter.type = 'bandpass';
+filter.frequency.value = 800 + Math.random() * 400;
+filter.Q.value = 0.8;
+const gain = getAudioCtx().createGain();
+gain.gain.setValueAtTime(0.04, getAudioCtx().currentTime);
+source.connect(filter); filter.connect(gain); gain.connect(getAudioCtx().destination);
+source.start();
+return source;
+}
+const s1 = makeRustle(), s2 = makeRustle();
+return { stop: () => { s1.stop(); s2.stop(); } };
+}
+function playBell() {
+// Deep temple bell gong every ~6 seconds
+const interval = setInterval(() => {
+const now = getAudioCtx().currentTime;
+[80, 160, 240, 320].forEach((freq, i) => {
+const osc = getAudioCtx().createOscillator();
+const gain = getAudioCtx().createGain();
+osc.type = 'sine';
+osc.frequency.value = freq;
+gain.gain.setValueAtTime(0.18 / (i + 1), now);
+gain.gain.exponentialRampToValueAtTime(0.001, now + 5);
+osc.connect(gain); gain.connect(getAudioCtx().destination);
+osc.start(now); osc.stop(now + 5);
+});
+}, 6500);
+return { stop: () => clearInterval(interval) };
+}
+const soundMakers = { moktak: playMoktak, bamboo: playBamboo, bell: playBell };
+const breathPhrases = ['Breathe in...', 'Hold gently...', 'Breathe out...', 'Rest...'];
+let breathInterval = null;
+let breathIdx = 0;
+function startBreathing() {
+if (breathInterval) return;
+document.getElementById('breathCircle').classList.add('breathing');
+breathInterval = setInterval(() => {
+breathIdx = (breathIdx + 1) % breathPhrases.length;
+document.getElementById('breathText').textContent = breathPhrases[breathIdx];
+}, 2000);
+}
+function stopBreathing() {
+if (Object.keys(activeSounds).length > 0) return;
+clearInterval(breathInterval);
+breathInterval = null;
+document.getElementById('breathCircle').classList.remove('breathing');
+document.getElementById('breathText').textContent = 'Breathe with me';
+}
+function toggleSound(name) {
+if (getAudioCtx().state === 'suspended') getAudioCtx().resume();
+const btn = document.getElementById('btn-' + name);
+const status = document.getElementById('status-' + name);
+if (activeSounds[name]) {
+activeSounds[name].stop();
+delete activeSounds[name];
+btn.classList.remove('active');
+status.textContent = '▶';
+stopBreathing();
+} else {
+activeSounds[name] = soundMakers[name]();
+btn.classList.add('active');
+status.textContent = '■';
+startBreathing();
+}
+}
+// ──────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+document.getElementById('birthYear').addEventListener('keydown', (e) => {
+if (e.key === 'Enter') findGuardian();
+});
+});
+</script>
+<script>
+const zodiacOrder = ['rat','ox','tiger','rabbit','dragon','snake','horse','goat','monkey','rooster','dog','pig'];
+const zodiacNames = {
+rat: '🐭 Rat', ox: '🐮 Ox', tiger: '🐯 Tiger', rabbit: '🐰 Rabbit',
+dragon: '🐲 Dragon', snake: '🐍 Snake', horse: '🐴 Horse', goat: '🐑 Goat',
+monkey: '🐵 Monkey', rooster: '🐓 Rooster', dog: '🐶 Dog', pig: '🐷 Pig'
+};
+function getZodiac(year) {
+// 1900 = Rat
+return zodiacOrder[(year - 1900) % 12];
+}
+function findGuardian() {
+const input = document.getElementById('birthYear');
+const year = parseInt(input.value);
+if (!year || year < 1900 || year > 2026) {
+input.style.borderColor = '#ff6b6b';
+input.style.boxShadow = '0 0 16px rgba(255,107,107,0.3)';
+setTimeout(() => {
+input.style.borderColor = '';
+input.style.boxShadow = '';
+}, 1200);
+return;
+}
+const sign = getZodiac(year);
+showGuardian(sign, year);
+}
+function showGuardian(sign, year) {
+document.querySelectorAll('.content-card').forEach(c => c.classList.remove('visible'));
+document.getElementById('emptyState').style.display = 'none';
+const card = document.getElementById('card-' + sign);
+if (card) {
+// Insert badge if not already there
+let badge = card.querySelector('.zodiac-badge');
+if (!badge) {
+badge = document.createElement('div');
+badge.className = 'zodiac-badge';
+card.querySelector('.guardian-header').insertAdjacentElement('beforebegin', badge);
+}
+badge.innerHTML = `Born in ${year} · Year of the ${zodiacNames[sign].split(' ')[1]}`;
+card.classList.add('visible');
+card.style.animation = 'none';
+card.offsetHeight;
+card.style.animation = 'fadeUp 0.6s ease both';
+setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+}
+// ── Meditation Sounds ──────────────────────────────────────────
+let audioCtx = null;
+const activeSounds = {};
+function getAudioCtx() {
+if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+return audioCtx;
+}
+function playMoktak() {
+// Repeating wooden moktak thud
+const interval = setInterval(() => {
+const osc = getAudioCtx().createOscillator();
+const gain = getAudioCtx().createGain();
+const now = getAudioCtx().currentTime;
+osc.type = 'sine';
+osc.frequency.setValueAtTime(280, now);
+osc.frequency.exponentialRampToValueAtTime(220, now + 0.3);
+gain.gain.setValueAtTime(0.35, now);
+gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+osc.connect(gain); gain.connect(getAudioCtx().destination);
+osc.start(now); osc.stop(now + 0.9);
+}, 2200);
+return { stop: () => clearInterval(interval) };
+}
+function playBamboo() {
+// Rustling bamboo wind — layered noise
+const bufferSize = getAudioCtx().sampleRate * 2;
+const buffer = getAudioCtx().createBuffer(1, bufferSize, getAudioCtx().sampleRate);
+const data = buffer.getChannelData(0);
+for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+function makeRustle() {
+const source = getAudioCtx().createBufferSource();
+source.buffer = buffer;
+source.loop = true;
+const filter = getAudioCtx().createBiquadFilter();
+filter.type = 'bandpass';
+filter.frequency.value = 800 + Math.random() * 400;
+filter.Q.value = 0.8;
+const gain = getAudioCtx().createGain();
+gain.gain.setValueAtTime(0.04, getAudioCtx().currentTime);
+source.connect(filter); filter.connect(gain); gain.connect(getAudioCtx().destination);
+source.start();
+return source;
+}
+const s1 = makeRustle(), s2 = makeRustle();
+return { stop: () => { s1.stop(); s2.stop(); } };
+}
+function playBell() {
+// Deep temple bell gong every ~6 seconds
+const interval = setInterval(() => {
+const now = getAudioCtx().currentTime;
+[80, 160, 240, 320].forEach((freq, i) => {
+const osc = getAudioCtx().createOscillator();
+const gain = getAudioCtx().createGain();
+osc.type = 'sine';
+osc.frequency.value = freq;
+gain.gain.setValueAtTime(0.18 / (i + 1), now);
+gain.gain.exponentialRampToValueAtTime(0.001, now + 5);
+osc.connect(gain); gain.connect(getAudioCtx().destination);
+osc.start(now); osc.stop(now + 5);
+});
+}, 6500);
+return { stop: () => clearInterval(interval) };
+}
+const soundMakers = { moktak: playMoktak, bamboo: playBamboo, bell: playBell };
+const breathPhrases = ['Breathe in...', 'Hold gently...', 'Breathe out...', 'Rest...'];
+let breathInterval = null;
+let breathIdx = 0;
+function startBreathing() {
+if (breathInterval) return;
+document.getElementById('breathCircle').classList.add('breathing');
+breathInterval = setInterval(() => {
+breathIdx = (breathIdx + 1) % breathPhrases.length;
+document.getElementById('breathText').textContent = breathPhrases[breathIdx];
+}, 2000);
+}
+function stopBreathing() {
+if (Object.keys(activeSounds).length > 0) return;
+clearInterval(breathInterval);
+breathInterval = null;
+document.getElementById('breathCircle').classList.remove('breathing');
+document.getElementById('breathText').textContent = 'Breathe with me';
+}
+function toggleSound(name) {
+if (getAudioCtx().state === 'suspended') getAudioCtx().resume();
+const btn = document.getElementById('btn-' + name);
+const status = document.getElementById('status-' + name);
+if (activeSounds[name]) {
+activeSounds[name].stop();
+delete activeSounds[name];
+btn.classList.remove('active');
+status.textContent = '▶';
+stopBreathing();
+} else {
+activeSounds[name] = soundMakers[name]();
+btn.classList.add('active');
+status.textContent = '■';
+startBreathing();
+}
+}
+// ──────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+document.getElementById('birthYear').addEventListener('keydown', (e) => {
+if (e.key === 'Enter') findGuardian();
+});
+});
+</script>
