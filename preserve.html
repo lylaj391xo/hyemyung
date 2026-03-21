@@ -1,648 +1,196 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.4">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px '.SF NS'; color: #0e0e0e}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px '.SF NS'; color: #0e0e0e; min-height: 17.0px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preserve Your Light — Hyemyung</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0806;
+  --gold: #c9923a;
+  --gold-light: #e8b96a;
+  --text: #f0e0c0;
+  --muted: #9a8060;
+  --card: #120e0a;
+  --border: rgba(180,120,40,0.2);
+  --candle: #ff9933;
+}
+html, body { min-height: 100vh; background: var(--bg); font-family: 'Cormorant Garamond', Georgia, serif; color: var(--text); }
+.candles-bg { position: fixed; bottom: 0; left: 0; right: 0; height: 120px; display: flex; justify-content: center; gap: 12px; align-items: flex-end; padding-bottom: 20px; pointer-events: none; z-index: 0; opacity: 0.3; }
+.c-wrap { display: flex; flex-direction: column; align-items: center; }
+.c-flame { width: 4px; height: 8px; background: var(--candle); border-radius: 50% 50% 30% 30%; box-shadow: 0 0 6px 2px rgba(255,153,51,0.6); animation: flicker 1.5s ease-in-out infinite alternate; }
+.c-body { width: 6px; background: linear-gradient(180deg, #e8d8b0, #c8b890); border-radius: 1px; }
+@keyframes flicker { 0% { transform: scaleX(1) translateX(0); } 50% { transform: scaleX(0.8) translateX(-1px); } 100% { transform: scaleX(1.1) translateX(0.5px); } }
+.glow-bg { position: fixed; bottom: 0; left: 20%; right: 20%; height: 200px; background: radial-gradient(ellipse, rgba(255,140,40,0.06) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+.container { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; padding: 60px 24px 100px; }
+.back-link { display: inline-block; font-size: 12px; color: var(--muted); letter-spacing: 0.1em; text-decoration: none; margin-bottom: 32px; transition: color 0.3s; }
+.back-link:hover { color: var(--gold); }
+header { text-align: center; margin-bottom: 48px; animation: fadeDown 1s ease both; }
+.lantern-preview { width: 60px; height: 72px; border-radius: 50% 50% 45% 45%; background: linear-gradient(135deg, #8b1a1a, #c03020); box-shadow: 0 0 30px rgba(220,100,30,0.4), inset 0 0 20px rgba(255,160,50,0.2); margin: 0 auto 20px; animation: lanternGlow 2s ease-in-out infinite alternate; position: relative; }
+.lantern-preview::before { content: ''; position: absolute; top: -16px; left: 50%; transform: translateX(-50%); width: 1px; height: 16px; background: rgba(180,140,60,0.5); }
+@keyframes lanternGlow { 0% { box-shadow: 0 0 30px rgba(220,100,30,0.4); } 100% { box-shadow: 0 0 50px rgba(220,100,30,0.6); } }
+h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 300; letter-spacing: 0.06em; line-height: 1.3; margin-bottom: 12px; }
+h1 em { font-style: italic; color: var(--gold-light); }
+.subtitle { font-size: 14px; color: var(--muted); letter-spacing: 0.08em; line-height: 1.8; }
+.divider { width: 1px; height: 32px; background: linear-gradient(180deg, transparent, var(--gold), transparent); margin: 0 auto 40px; }
+.pricing-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; animation: fadeUp 0.8s 0.2s ease both; }
+.price-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 24px 28px; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+.price-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,140,50,0), transparent); transition: background 0.3s; }
+.price-card:hover { border-color: rgba(200,140,50,0.4); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.price-card:hover::before { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.price-card.featured { border-color: var(--gold); background: linear-gradient(135deg, #180e08, #120e0a); }
+.price-card.featured::before { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.badge { position: absolute; top: 16px; right: 16px; background: var(--gold); color: #0a0806; font-size: 10px; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 999px; font-weight: 500; }
+.card-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+.tier-name { font-size: 13px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; }
+.price-krw { font-size: 26px; font-weight: 300; color: var(--text); letter-spacing: 0.02em; }
+.card-desc { font-size: 14px; color: var(--muted); line-height: 1.7; font-style: italic; margin-bottom: 8px; }
+.card-tagline { font-size: 12px; color: var(--gold); letter-spacing: 0.08em; opacity: 0.8; }
+.card-features { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(180,120,40,0.1); display: flex; flex-direction: column; gap: 6px; }
+.feature { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; padding-left: 14px; position: relative; }
+.feature::before { content: '–'; position: absolute; left: 0; color: var(--gold); opacity: 0.6; }
+.select-btn { width: 100%; background: transparent; border: 1px solid var(--gold); border-radius: 4px; padding: 14px; color: var(--gold-light); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15px; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s; margin-top: 16px; }
+.select-btn:hover { background: rgba(200,140,50,0.1); box-shadow: 0 0 24px rgba(200,140,50,0.2); }
+.price-card.featured .select-btn { background: rgba(200,140,50,0.15); }
+.footer-note { text-align: center; font-size: 12px; color: var(--muted); letter-spacing: 0.06em; line-height: 1.8; animation: fadeUp 0.8s 0.5s ease both; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 100; padding: 24px; }
+.modal-overlay.show { display: flex; }
+.modal { background: #160e0a; border: 1px solid var(--gold); border-radius: 8px; padding: 40px 32px; max-width: 400px; width: 100%; text-align: center; position: relative; animation: fadeUp 0.4s ease both; }
+.modal::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.modal-lantern { font-size: 40px; margin-bottom: 16px; display: block; }
+.modal h2 { font-size: 22px; font-weight: 300; letter-spacing: 0.06em; margin-bottom: 12px; }
+.modal p { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 24px; font-style: italic; }
+.modal-price { font-size: 28px; color: var(--gold-light); margin-bottom: 8px; letter-spacing: 0.05em; }
+.modal-price-sub { font-size: 12px; color: var(--muted); margin-bottom: 28px; }
+.modal-coming-soon { background: rgba(200,140,50,0.08); border: 1px solid rgba(200,140,50,0.2); border-radius: 4px; padding: 16px; margin-bottom: 20px; }
+.modal-coming-soon p { font-size: 13px; color: var(--gold); margin-bottom: 0; letter-spacing: 0.08em; font-style: normal; }
+.notify-input { width: 100%; padding: 12px 16px; background: rgba(20,12,8,0.8); border: 1px solid var(--border); border-radius: 4px; color: var(--text); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15px; outline: none; margin-bottom: 12px; transition: border-color 0.3s; }
+.notify-input:focus { border-color: var(--gold); }
+.notify-input::placeholder { color: rgba(154,128,96,0.5); font-style: italic; }
+.notify-btn { width: 100%; background: transparent; border: 1px solid var(--gold); border-radius: 4px; padding: 12px; color: var(--gold-light); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 14px; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s; margin-bottom: 12px; }
+.notify-btn:hover { background: rgba(200,140,50,0.1); }
+.modal-close { background: transparent; border: none; color: var(--muted); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 13px; letter-spacing: 0.1em; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); background: rgba(20,12,8,0.95); border: 1px solid var(--gold); border-radius: 4px; padding: 10px 24px; color: var(--gold-light); font-size: 13px; letter-spacing: 0.08em; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 200; }
+.toast.show { opacity: 1; }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 480px) { .container { padding: 40px 16px 80px; } .price-card { padding: 20px; } .modal { padding: 32px 20px; } }
+</style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1">&lt;title&gt;Preserve Your Light — Hyemyung&lt;/title&gt;</p>
-<p class="p1">&lt;link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&amp;family=Noto+Serif+KR:wght@300;400&amp;display=swap" rel="stylesheet"&gt;</p>
-<p class="p1">&lt;style&gt;</p>
-<p class="p1">* { margin: 0; padding: 0; box-sizing: border-box; }</p>
-<p class="p1">:root {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--bg: #0a0806;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--gold: #c9923a;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--gold-light: #e8b96a;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--text: #f0e0c0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--muted: #9a8060;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--card: #120e0a;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--border: rgba(180,120,40,0.2);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--candle: #ff9933;</p>
-<p class="p1">}</p>
-<p class="p1">html, body {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>min-height: 100vh;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: var(--bg);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Cormorant Garamond', Georgia, serif;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* 배경 초들 */</p>
-<p class="p1">.candles-bg {</p>
-<p class="p1">position: fixed;</p>
-<p class="p1">bottom: 0; left: 0; right: 0;</p>
-<p class="p1">height: 120px;</p>
-<p class="p1">display: flex;</p>
-<p class="p1">justify-content: center;</p>
-<p class="p1">gap: 12px;</p>
-<p class="p1">align-items: flex-end;</p>
-<p class="p1">padding-bottom: 20px;</p>
-<p class="p1">pointer-events: none;</p>
-<p class="p1">z-index: 0;</p>
-<p class="p1">opacity: 0.3;</p>
-<p class="p1">}</p>
-<p class="p1">.c-wrap { display: flex; flex-direction: column; align-items: center; }</p>
-<p class="p1">.c-flame {</p>
-<p class="p1">width: 4px; height: 8px;</p>
-<p class="p1">background: var(–candle);</p>
-<p class="p1">border-radius: 50% 50% 30% 30%;</p>
-<p class="p1">box-shadow: 0 0 6px 2px rgba(255,153,51,0.6);</p>
-<p class="p1">animation: flicker 1.5s ease-in-out infinite alternate;</p>
-<p class="p1">}</p>
-<p class="p1">.c-body {</p>
-<p class="p1">width: 6px;</p>
-<p class="p1">background: linear-gradient(180deg, #e8d8b0, #c8b890);</p>
-<p class="p1">border-radius: 1px;</p>
-<p class="p1">}</p>
-<p class="p1">@keyframes flicker {</p>
-<p class="p1">0% { transform: scaleX(1) translateX(0); }</p>
-<p class="p1">50% { transform: scaleX(0.8) translateX(-1px); }</p>
-<p class="p1">100% { transform: scaleX(1.1) translateX(0.5px); }</p>
-<p class="p1">}</p>
-<p class="p1">.glow-bg {</p>
-<p class="p1">position: fixed;</p>
-<p class="p1">bottom: 0; left: 20%; right: 20%;</p>
-<p class="p1">height: 200px;</p>
-<p class="p1">background: radial-gradient(ellipse, rgba(255,140,40,0.06) 0%, transparent 70%);</p>
-<p class="p1">pointer-events: none;</p>
-<p class="p1">z-index: 0;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.container {</p>
-<p class="p1">position: relative;</p>
-<p class="p1">z-index: 1;</p>
-<p class="p1">max-width: 560px;</p>
-<p class="p1">margin: 0 auto;</p>
-<p class="p1">padding: 60px 24px 100px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">header {</p>
-<p class="p1">text-align: center;</p>
-<p class="p1">margin-bottom: 48px;</p>
-<p class="p1">animation: fadeDown 1s ease both;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.back-link {</p>
-<p class="p1">display: inline-block;</p>
-<p class="p1">font-size: 12px;</p>
-<p class="p1">color: var(–muted);</p>
-<p class="p1">letter-spacing: 0.1em;</p>
-<p class="p1">text-decoration: none;</p>
-<p class="p1">margin-bottom: 32px;</p>
-<p class="p1">transition: color 0.3s;</p>
-<p class="p1">}</p>
-<p class="p1">.back-link:hover { color: var(–gold); }</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-preview {</p>
-<p class="p1">width: 60px;</p>
-<p class="p1">height: 72px;</p>
-<p class="p1">border-radius: 50% 50% 45% 45%;</p>
-<p class="p1">background: linear-gradient(135deg, #8b1a1a, #c03020);</p>
-<p class="p1">box-shadow: 0 0 30px rgba(220,100,30,0.4), inset 0 0 20px rgba(255,160,50,0.2);</p>
-<p class="p1">margin: 0 auto 20px;</p>
-<p class="p1">animation: lanternGlow 2s ease-in-out infinite alternate;</p>
-<p class="p1">position: relative;</p>
-<p class="p1">}</p>
-<p class="p1">.lantern-preview::before {</p>
-<p class="p1">content: ‘’;</p>
-<p class="p1">position: absolute;</p>
-<p class="p1">top: -16px;</p>
-<p class="p1">left: 50%;</p>
-<p class="p1">transform: translateX(-50%);</p>
-<p class="p1">width: 1px;</p>
-<p class="p1">height: 16px;</p>
-<p class="p1">background: rgba(180,140,60,0.5);</p>
-<p class="p1">}</p>
-<p class="p1">@keyframes lanternGlow {</p>
-<p class="p1">0% { box-shadow: 0 0 30px rgba(220,100,30,0.4), inset 0 0 20px rgba(255,160,50,0.2); }</p>
-<p class="p1">100% { box-shadow: 0 0 50px rgba(220,100,30,0.6), inset 0 0 30px rgba(255,160,50,0.3); }</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">h1 {</p>
-<p class="p1">font-size: clamp(28px, 5vw, 40px);</p>
-<p class="p1">font-weight: 300;</p>
-<p class="p1">letter-spacing: 0.06em;</p>
-<p class="p1">line-height: 1.3;</p>
-<p class="p1">margin-bottom: 12px;</p>
-<p class="p1">}</p>
-<p class="p1">h1 em { font-style: italic; color: var(–gold-light); }</p>
-<p class="p2"><br></p>
-<p class="p1">.subtitle {</p>
-<p class="p1">font-size: 14px;</p>
-<p class="p1">color: var(–muted);</p>
-<p class="p1">letter-spacing: 0.08em;</p>
-<p class="p1">line-height: 1.8;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.divider {</p>
-<p class="p1">width: 1px;</p>
-<p class="p1">height: 32px;</p>
-<p class="p1">background: linear-gradient(180deg, transparent, var(–gold), transparent);</p>
-<p class="p1">margin: 0 auto 40px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* 가격 카드 */</p>
-<p class="p1">.pricing-grid {</p>
-<p class="p1">display: flex;</p>
-<p class="p1">flex-direction: column;</p>
-<p class="p1">gap: 16px;</p>
-<p class="p1">margin-bottom: 40px;</p>
-<p class="p1">animation: fadeUp 0.8s 0.2s ease both;</p>
-<p class="p1">opacity: 0;</p>
-<p class="p1">animation-fill-mode: both;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.price-card {</p>
-<p class="p1">background: var(–card);</p>
-<p class="p1">border: 1px solid var(–border);</p>
-<p class="p1">border-radius: 8px;</p>
-<p class="p1">padding: 24px 28px;</p>
-<p class="p1">cursor: pointer;</p>
-<p class="p1">transition: all 0.3s ease;</p>
-<p class="p1">position: relative;</p>
-<p class="p1">overflow: hidden;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.price-card::before {</p>
-<p class="p1">content: ‘’;</p>
-<p class="p1">position: absolute;</p>
-<p class="p1">top: 0; left: 0; right: 0;</p>
-<p class="p1">height: 1px;</p>
-<p class="p1">background: linear-gradient(90deg, transparent, rgba(200,140,50,0), transparent);</p>
-<p class="p1">transition: background 0.3s;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.price-card:hover {</p>
-<p class="p1">border-color: rgba(200,140,50,0.4);</p>
-<p class="p1">transform: translateY(-2px);</p>
-<p class="p1">box-shadow: 0 8px 32px rgba(0,0,0,0.3);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.price-card:hover::before {</p>
-<p class="p1">background: linear-gradient(90deg, transparent, var(–gold), transparent);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.price-card.featured {</p>
-<p class="p1">border-color: var(–gold);</p>
-<p class="p1">background: linear-gradient(135deg, #180e08, #120e0a);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.price-card.featured::before {</p>
-<p class="p1">background: linear-gradient(90deg, transparent, var(–gold), transparent);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.badge {</p>
-<p class="p1">position: absolute;</p>
-<p class="p1">top: 16px;</p>
-<p class="p1">right: 16px;</p>
-<p class="p1">background: var(–gold);</p>
-<p class="p1">color: #0a0806;</p>
-<p class="p1">font-size: 10px;</p>
-<p class="p1">letter-spacing: 0.1em;</p>
-<p class="p1">padding: 3px 10px;</p>
-<p class="p1">border-radius: 999px;</p>
-<p class="p1">font-weight: 500;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.card-top {</p>
-<p class="p1">display: flex;</p>
-<p class="p1">align-items: baseline;</p>
-<p class="p1">justify-content: space-between;</p>
-<p class="p1">margin-bottom: 12px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.tier-name {</p>
-<p class="p1">font-size: 13px;</p>
-<p class="p1">letter-spacing: 0.15em;</p>
-<p class="p1">color: var(–muted);</p>
-<p class="p1">text-transform: uppercase;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.price-wrap {</p>
-<p class="p1">text-align: right;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.price-krw {</p>
-<p class="p1">font-size: 26px;</p>
-<p class="p1">font-weight: 300;</p>
-<p class="p1">color: var(–text);</p>
-<p class="p1">letter-spacing: 0.02em;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.price-usd { display: none; }</p>
-<p class="p2"><br></p>
-<p class="p1">.card-desc {</p>
-<p class="p1">font-size: 14px;</p>
-<p class="p1">color: var(–muted);</p>
-<p class="p1">line-height: 1.7;</p>
-<p class="p1">font-style: italic;</p>
-<p class="p1">margin-bottom: 12px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.card-tagline {</p>
-<p class="p1">font-size: 12px;</p>
-<p class="p1">color: var(–gold);</p>
-<p class="p1">letter-spacing: 0.08em;</p>
-<p class="p1">opacity: 0.8;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.card-features {</p>
-<p class="p1">margin-top: 14px;</p>
-<p class="p1">padding-top: 14px;</p>
-<p class="p1">border-top: 1px solid rgba(180,120,40,0.1);</p>
-<p class="p1">display: flex;</p>
-<p class="p1">flex-direction: column;</p>
-<p class="p1">gap: 6px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.feature {</p>
-<p class="p1">font-size: 12px;</p>
-<p class="p1">color: var(–muted);</p>
-<p class="p1">letter-spacing: 0.05em;</p>
-<p class="p1">padding-left: 14px;</p>
-<p class="p1">position: relative;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.feature::before {</p>
-<p class="p1">content: ‘–’;</p>
-<p class="p1">position: absolute;</p>
-<p class="p1">left: 0;</p>
-<p class="p1">color: var(–gold);</p>
-<p class="p1">opacity: 0.6;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* 선택 버튼 */</p>
-<p class="p1">.select-btn {</p>
-<p class="p1">width: 100%;</p>
-<p class="p1">background: transparent;</p>
-<p class="p1">border: 1px solid var(–gold);</p>
-<p class="p1">border-radius: 4px;</p>
-<p class="p1">padding: 14px;</p>
-<p class="p1">color: var(–gold-light);</p>
-<p class="p1">font-family: ‘Cormorant Garamond’, Georgia, serif;</p>
-<p class="p1">font-size: 15px;</p>
-<p class="p1">letter-spacing: 0.1em;</p>
-<p class="p1">cursor: pointer;</p>
-<p class="p1">transition: all 0.3s;</p>
-<p class="p1">margin-top: 16px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.select-btn:hover {</p>
-<p class="p1">background: rgba(200,140,50,0.1);</p>
-<p class="p1">box-shadow: 0 0 24px rgba(200,140,50,0.2);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.price-card.featured .select-btn {</p>
-<p class="p1">background: rgba(200,140,50,0.15);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* 하단 안내 */</p>
-<p class="p1">.footer-note {</p>
-<p class="p1">text-align: center;</p>
-<p class="p1">font-size: 12px;</p>
-<p class="p1">color: var(–muted);</p>
-<p class="p1">letter-spacing: 0.06em;</p>
-<p class="p1">line-height: 1.8;</p>
-<p class="p1">opacity: 0.7;</p>
-<p class="p1">animation: fadeUp 0.8s 0.5s ease both;</p>
-<p class="p1">opacity: 0;</p>
-<p class="p1">animation-fill-mode: both;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* 모달 */</p>
-<p class="p1">.modal-overlay {</p>
-<p class="p1">position: fixed;</p>
-<p class="p1">inset: 0;</p>
-<p class="p1">background: rgba(0,0,0,0.7);</p>
-<p class="p1">display: none;</p>
-<p class="p1">align-items: center;</p>
-<p class="p1">justify-content: center;</p>
-<p class="p1">z-index: 100;</p>
-<p class="p1">padding: 24px;</p>
-<p class="p1">}</p>
-<p class="p1">.modal-overlay.show { display: flex; }</p>
-<p class="p2"><br></p>
-<p class="p1">.modal {</p>
-<p class="p1">background: #160e0a;</p>
-<p class="p1">border: 1px solid var(–gold);</p>
-<p class="p1">border-radius: 8px;</p>
-<p class="p1">padding: 40px 32px;</p>
-<p class="p1">max-width: 400px;</p>
-<p class="p1">width: 100%;</p>
-<p class="p1">text-align: center;</p>
-<p class="p1">position: relative;</p>
-<p class="p1">animation: fadeUp 0.4s ease both;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.modal::before {</p>
-<p class="p1">content: ‘’;</p>
-<p class="p1">position: absolute;</p>
-<p class="p1">top: 0; left: 0; right: 0;</p>
-<p class="p1">height: 1px;</p>
-<p class="p1">background: linear-gradient(90deg, transparent, var(–gold), transparent);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.modal-lantern {</p>
-<p class="p1">font-size: 40px;</p>
-<p class="p1">margin-bottom: 16px;</p>
-<p class="p1">display: block;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.modal h2 {</p>
-<p class="p1">font-size: 22px;</p>
-<p class="p1">font-weight: 300;</p>
-<p class="p1">letter-spacing: 0.06em;</p>
-<p class="p1">margin-bottom: 12px;</p>
-<p class="p1">color: var(–text);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.modal p {</p>
-<p class="p1">font-size: 14px;</p>
-<p class="p1">color: var(–muted);</p>
-<p class="p1">line-height: 1.8;</p>
-<p class="p1">margin-bottom: 24px;</p>
-<p class="p1">font-style: italic;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.modal-price {</p>
-<p class="p1">font-size: 28px;</p>
-<p class="p1">color: var(–gold-light);</p>
-<p class="p1">margin-bottom: 8px;</p>
-<p class="p1">letter-spacing: 0.05em;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.modal-price-sub {</p>
-<p class="p1">font-size: 12px;</p>
-<p class="p1">color: var(–muted);</p>
-<p class="p1">margin-bottom: 28px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.modal-coming-soon {</p>
-<p class="p1">background: rgba(200,140,50,0.08);</p>
-<p class="p1">border: 1px solid rgba(200,140,50,0.2);</p>
-<p class="p1">border-radius: 4px;</p>
-<p class="p1">padding: 16px;</p>
-<p class="p1">margin-bottom: 20px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.modal-coming-soon p {</p>
-<p class="p1">font-size: 13px;</p>
-<p class="p1">color: var(–gold);</p>
-<p class="p1">margin-bottom: 0;</p>
-<p class="p1">letter-spacing: 0.08em;</p>
-<p class="p1">font-style: normal;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.notify-input {</p>
-<p class="p1">width: 100%;</p>
-<p class="p1">padding: 12px 16px;</p>
-<p class="p1">background: rgba(20,12,8,0.8);</p>
-<p class="p1">border: 1px solid var(–border);</p>
-<p class="p1">border-radius: 4px;</p>
-<p class="p1">color: var(–text);</p>
-<p class="p1">font-family: ‘Cormorant Garamond’, Georgia, serif;</p>
-<p class="p1">font-size: 15px;</p>
-<p class="p1">outline: none;</p>
-<p class="p1">margin-bottom: 12px;</p>
-<p class="p1">transition: border-color 0.3s;</p>
-<p class="p1">}</p>
-<p class="p1">.notify-input:focus { border-color: var(–gold); }</p>
-<p class="p1">.notify-input::placeholder { color: rgba(154,128,96,0.5); font-style: italic; }</p>
-<p class="p2"><br></p>
-<p class="p1">.notify-btn {</p>
-<p class="p1">width: 100%;</p>
-<p class="p1">background: transparent;</p>
-<p class="p1">border: 1px solid var(–gold);</p>
-<p class="p1">border-radius: 4px;</p>
-<p class="p1">padding: 12px;</p>
-<p class="p1">color: var(–gold-light);</p>
-<p class="p1">font-family: ‘Cormorant Garamond’, Georgia, serif;</p>
-<p class="p1">font-size: 14px;</p>
-<p class="p1">letter-spacing: 0.1em;</p>
-<p class="p1">cursor: pointer;</p>
-<p class="p1">transition: all 0.3s;</p>
-<p class="p1">margin-bottom: 12px;</p>
-<p class="p1">}</p>
-<p class="p1">.notify-btn:hover { background: rgba(200,140,50,0.1); }</p>
-<p class="p2"><br></p>
-<p class="p1">.modal-close {</p>
-<p class="p1">background: transparent;</p>
-<p class="p1">border: none;</p>
-<p class="p1">color: var(–muted);</p>
-<p class="p1">font-family: ‘Cormorant Garamond’, Georgia, serif;</p>
-<p class="p1">font-size: 13px;</p>
-<p class="p1">letter-spacing: 0.1em;</p>
-<p class="p1">cursor: pointer;</p>
-<p class="p1">text-decoration: underline;</p>
-<p class="p1">text-underline-offset: 3px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.toast {</p>
-<p class="p1">position: fixed;</p>
-<p class="p1">bottom: 32px;</p>
-<p class="p1">left: 50%;</p>
-<p class="p1">transform: translateX(-50%);</p>
-<p class="p1">background: rgba(20,12,8,0.95);</p>
-<p class="p1">border: 1px solid var(–gold);</p>
-<p class="p1">border-radius: 4px;</p>
-<p class="p1">padding: 10px 24px;</p>
-<p class="p1">color: var(–gold-light);</p>
-<p class="p1">font-size: 13px;</p>
-<p class="p1">letter-spacing: 0.08em;</p>
-<p class="p1">opacity: 0;</p>
-<p class="p1">transition: opacity 0.3s;</p>
-<p class="p1">pointer-events: none;</p>
-<p class="p1">z-index: 200;</p>
-<p class="p1">}</p>
-<p class="p1">.toast.show { opacity: 1; }</p>
-<p class="p2"><br></p>
-<p class="p1">@keyframes fadeDown {</p>
-<p class="p1">from { opacity: 0; transform: translateY(-20px); }</p>
-<p class="p1">to { opacity: 1; transform: translateY(0); }</p>
-<p class="p1">}</p>
-<p class="p1">@keyframes fadeUp {</p>
-<p class="p1">from { opacity: 0; transform: translateY(20px); }</p>
-<p class="p1">to { opacity: 1; transform: translateY(0); }</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">@media (max-width: 480px) {</p>
-<p class="p1">.container { padding: 40px 16px 80px; }</p>
-<p class="p1">.price-card { padding: 20px; }</p>
-<p class="p1">.modal { padding: 32px 20px; }</p>
-<p class="p1">}</p>
-<p class="p1">&lt;/style&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="candles-bg" id="candlesBg"&gt;&lt;/div&gt;</p>
-<p class="p1">&lt;div class="glow-bg"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;a class="back-link" href="lantern.html"&gt;← Back to your lantern&lt;/a&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="lantern-preview"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Preserve&lt;br&gt;&lt;em&gt;This Light&lt;/em&gt;&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle"&gt;Your lantern will fade in 7 days.&lt;br&gt;Choose how long to keep this moment alive.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="pricing-grid"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">```</p>
-<p class="p1">&lt;div class="price-card" onclick="openModal('30일', '₩4,900', '$3.99', '30 days')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card-top"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="tier-name"&gt;30 Days&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="price-wrap"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="price-krw"&gt;$3.99&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="card-desc"&gt;Keep this light burning for one month.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="card-tagline"&gt;Less than a coffee&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card-features"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="feature"&gt;30-day preservation&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="feature"&gt;Revisit anytime&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="select-btn"&gt;Preserve for 30 days&lt;/button&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="price-card featured" onclick="openModal('1년', '₩34,900', '$24.99', '1 year')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="badge"&gt;Most chosen&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card-top"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="tier-name"&gt;1 Year&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="price-wrap"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="price-krw"&gt;$24.99&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="card-desc"&gt;A candle that burns through every season.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="card-tagline"&gt;A candle a month&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card-features"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="feature"&gt;365-day preservation&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="feature"&gt;Anniversary reminder&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="feature"&gt;All lantern colors unlocked&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="select-btn"&gt;Preserve for 1 year&lt;/button&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="price-card" onclick="openModal('영구 보존', '₩79,900', '$59.99', 'Forever')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card-top"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="tier-name"&gt;Forever&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="price-wrap"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="price-krw"&gt;$59.99&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="card-desc"&gt;Some moments deserve to never be forgotten.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="card-tagline"&gt;Light that never fades&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card-features"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="feature"&gt;Permanent preservation&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="feature"&gt;Anniversary reminders&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="feature"&gt;All lantern colors unlocked&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="feature"&gt;Premium guardian lanterns&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="select-btn"&gt;Preserve forever&lt;/button&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p1">```</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="footer-note"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>Payments coming soon. Leave your email&lt;br&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>to be notified when preservation opens.</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/p&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;!-- 모달 --&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="modal"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="modal-lantern"&gt;🏮&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2 id="modalTier"&gt;Preserve for 1 Year&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;This light holds the memory of who you were today.&lt;br&gt;Keep it burning.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal-price" id="modalPrice"&gt;₩34,900&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal-price-sub" id="modalPriceSub"&gt;one-time&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">```</p>
-<p class="p1">&lt;div class="modal-coming-soon"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p&gt;🕯 Payment opening soon — leave your email to be first&lt;/p&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;input class="notify-input" type="email" id="emailInput" placeholder="your@email.com" /&gt;</p>
-<p class="p1">&lt;button class="notify-btn" onclick="submitEmail()"&gt;Notify me when this opens&lt;/button&gt;</p>
-<p class="p1">&lt;button class="modal-close" onclick="closeModal()"&gt;Maybe later&lt;/button&gt;</p>
-<p class="p1">```</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="toast" id="toast"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;script&gt;</p>
-<p class="p1">function buildCandles() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const bg = document.getElementById('candlesBg');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>for (let i = 0; i &lt; 20; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const wrap = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrap.className = 'c-wrap';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const delay = Math.random() * 1.5;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const dur = 1 + Math.random();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const h = 14 + Math.random() * 16;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrap.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="c-flame" style="animation-delay:${delay}s;animation-duration:${dur}s"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="c-body" style="height:${h}px"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>bg.appendChild(wrap);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function openModal(tier, krw, usd, period) {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('modalTier').textContent = `Preserve for ${period}`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('modalPrice').textContent = usd;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('modalPriceSub').textContent = 'one-time';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('modalOverlay').classList.add('show');</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function closeModal() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('modalOverlay').classList.remove('show');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('emailInput').value = '';</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function closeModalOutside(e) {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if (e.target === document.getElementById('modalOverlay')) closeModal();</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function submitEmail() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const email = document.getElementById('emailInput').value.trim();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if (!email || !email.includes('@')) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>showToast('Please enter a valid email');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>closeModal();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>showToast('✓ We will notify you when preservation opens 🏮');</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function showToast(msg) {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const t = document.getElementById('toast');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>t.textContent = msg;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>t.classList.add('show');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>setTimeout(() =&gt; t.classList.remove('show'), 3000);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">buildCandles();</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+<div class="candles-bg" id="candlesBg"></div>
+<div class="glow-bg"></div>
+<div class="container">
+  <a class="back-link" href="lantern.html">← Back to your lantern</a>
+  <header>
+    <div class="lantern-preview"></div>
+    <h1>Preserve<br><em>This Light</em></h1>
+    <div class="divider"></div>
+    <p class="subtitle">Your lantern will fade in 7 days.<br>Choose how long to keep this moment alive.</p>
+  </header>
+  <div class="pricing-grid">
+    <div class="price-card" onclick="openModal('30 days', '$3.99', '30 days')">
+      <div class="card-top">
+        <span class="tier-name">30 Days</span>
+        <div class="price-krw">$3.99</div>
+      </div>
+      <p class="card-desc">Keep this light burning for one month.</p>
+      <p class="card-tagline">Less than a coffee</p>
+      <div class="card-features">
+        <span class="feature">30-day preservation</span>
+        <span class="feature">Revisit anytime</span>
+      </div>
+      <button class="select-btn">Preserve for 30 days</button>
+    </div>
+    <div class="price-card featured" onclick="openModal('1 year', '$24.99', '1 year')">
+      <div class="badge">Most chosen</div>
+      <div class="card-top">
+        <span class="tier-name">1 Year</span>
+        <div class="price-krw">$24.99</div>
+      </div>
+      <p class="card-desc">A candle that burns through every season.</p>
+      <p class="card-tagline">A candle a month</p>
+      <div class="card-features">
+        <span class="feature">365-day preservation</span>
+        <span class="feature">Anniversary reminder</span>
+        <span class="feature">All lantern colors unlocked</span>
+      </div>
+      <button class="select-btn">Preserve for 1 year</button>
+    </div>
+    <div class="price-card" onclick="openModal('Forever', '$59.99', 'Forever')">
+      <div class="card-top">
+        <span class="tier-name">Forever</span>
+        <div class="price-krw">$59.99</div>
+      </div>
+      <p class="card-desc">Some moments deserve to never be forgotten.</p>
+      <p class="card-tagline">Light that never fades</p>
+      <div class="card-features">
+        <span class="feature">Permanent preservation</span>
+        <span class="feature">Anniversary reminders</span>
+        <span class="feature">All lantern colors unlocked</span>
+        <span class="feature">Premium guardian lanterns</span>
+      </div>
+      <button class="select-btn">Preserve forever</button>
+    </div>
+  </div>
+  <p class="footer-note">Payments coming soon. Leave your email<br>to be notified when preservation opens.</p>
+</div>
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <span class="modal-lantern">🏮</span>
+    <h2 id="modalTier">Preserve for 1 Year</h2>
+    <p>This light holds the memory of who you were today.<br>Keep it burning.</p>
+    <div class="modal-price" id="modalPrice">$24.99</div>
+    <div class="modal-price-sub">one-time</div>
+    <div class="modal-coming-soon">
+      <p>🕯 Payment opening soon — leave your email to be first</p>
+    </div>
+    <input class="notify-input" type="email" id="emailInput" placeholder="your@email.com" />
+    <button class="notify-btn" onclick="submitEmail()">Notify me when this opens</button>
+    <button class="modal-close" onclick="closeModal()">Maybe later</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function buildCandles() {
+  const bg = document.getElementById('candlesBg');
+  for (let i = 0; i < 20; i++) {
+    const wrap = document.createElement('div');
+    wrap.className = 'c-wrap';
+    const delay = Math.random() * 1.5;
+    const dur = 1 + Math.random();
+    const h = 14 + Math.random() * 16;
+    wrap.innerHTML = `<div class="c-flame" style="animation-delay:${delay}s;animation-duration:${dur}s"></div><div class="c-body" style="height:${h}px"></div>`;
+    bg.appendChild(wrap);
+  }
+}
+function openModal(tier, price, period) {
+  document.getElementById('modalTier').textContent = `Preserve for ${period}`;
+  document.getElementById('modalPrice').textContent = price;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+  document.getElementById('emailInput').value = '';
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+function submitEmail() {
+  const email = document.getElementById('emailInput').value.trim();
+  if (!email || !email.includes('@')) { showToast('Please enter a valid email'); return; }
+  closeModal();
+  showToast('✓ We will notify you when preservation opens 🏮');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+buildCandles();
+</script>
 </body>
 </html>
