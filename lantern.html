@@ -1,826 +1,810 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.4">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Light a Lantern — Hyemyung</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0806;
+  --gold: #c9923a;
+  --gold-light: #e8b96a;
+  --red: #8b1a1a;
+  --red-glow: rgba(180, 60, 20, 0.4);
+  --paper: #f5e6c8;
+  --text: #f0e0c0;
+  --muted: #9a8060;
+  --candle: #ff9933;
+}
+
+html, body {
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  overflow-x: hidden;
+}
+
+/* Temple background */
+.temple-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Ceiling pattern */
+.ceiling {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 45%;
+  background: linear-gradient(180deg, #1a0f08 0%, #0d0806 100%);
+  border-bottom: 1px solid rgba(180,100,20,0.2);
+}
+
+/* Hanging lanterns in background */
+.bg-lanterns {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 45%;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 0 10px;
+  flex-wrap: wrap;
+}
+
+.bg-lantern {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -8px;
+}
+
+.bg-lantern-string {
+  width: 1px;
+  height: 20px;
+  background: rgba(180,140,60,0.4);
+}
+
+.bg-lantern-body {
+  width: 28px;
+  height: 32px;
+  border-radius: 50% 50% 45% 45%;
+  position: relative;
+  box-shadow: 0 0 12px var(--red-glow);
+}
+
+.bg-lantern-tag {
+  width: 6px;
+  height: 18px;
+  background: rgba(200,220,80,0.5);
+  margin-top: 2px;
+  border-radius: 1px;
+}
+
+/* Floor */
+.floor {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, #0d0806 0%, #1a1008 60%, #221408 100%);
+}
+
+/* Candle row */
+.candles-row {
+  position: absolute;
+  bottom: 30%;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 20px;
+}
+
+.candle-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.candle-flame {
+  width: 4px;
+  height: 8px;
+  background: var(--candle);
+  border-radius: 50% 50% 30% 30%;
+  box-shadow: 0 0 6px 2px rgba(255,153,51,0.6), 0 0 12px 4px rgba(255,100,0,0.3);
+  animation: flicker 1.5s ease-in-out infinite alternate;
+}
+
+.candle-body {
+  width: 6px;
+  height: 20px;
+  background: linear-gradient(180deg, #e8d8b0 0%, #c8b890 100%);
+  border-radius: 1px;
+}
+
+@keyframes flicker {
+  0% { transform: scaleX(1) scaleY(1) translateX(0); opacity: 1; }
+  25% { transform: scaleX(0.8) scaleY(1.1) translateX(-1px); opacity: 0.9; }
+  50% { transform: scaleX(1.1) scaleY(0.9) translateX(1px); opacity: 1; }
+  75% { transform: scaleX(0.9) scaleY(1.05) translateX(-0.5px); opacity: 0.95; }
+  100% { transform: scaleX(1.05) scaleY(1) translateX(0.5px); opacity: 1; }
+}
+
+/* Ambient glow */
+.glow-bottom {
+  position: absolute;
+  bottom: 0; left: 20%; right: 20%;
+  height: 35%;
+  background: radial-gradient(ellipse, rgba(180,80,20,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.glow-candles {
+  position: absolute;
+  bottom: 28%;
+  left: 0; right: 0;
+  height: 15%;
+  background: radial-gradient(ellipse, rgba(255,140,40,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Main content */
+.container {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 24px 80px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 48px;
+  animation: fadeDown 1.2s ease both;
+}
+
+.site-tag {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+h1 {
+  font-size: clamp(32px, 6vw, 52px);
+  font-weight: 300;
+  color: var(--text);
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  line-height: 1.8;
+}
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, var(--gold), transparent);
+  margin: 0 auto 40px;
+}
+
+/* Input section */
+.input-section {
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+  animation: fadeUp 1s 0.3s ease both;
+  opacity: 0;
+  animation-fill-mode: both;
+}
+
+.input-label {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.input-group input, .input-group textarea {
+  background: rgba(20,12,8,0.8);
+  border: 1px solid rgba(180,120,40,0.3);
+  border-radius: 4px;
+  padding: 14px 18px;
+  color: var(--text);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  width: 100%;
+  backdrop-filter: blur(4px);
+}
+
+.input-group textarea {
+  resize: none;
+  height: 80px;
+  line-height: 1.6;
+}
+
+.input-group input:focus, .input-group textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(200,140,50,0.15);
+}
+
+.input-group input::placeholder, .input-group textarea::placeholder {
+  color: rgba(154,128,96,0.5);
+  font-style: italic;
+}
+
+.light-btn {
+  background: transparent;
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  padding: 14px 40px;
+  color: var(--gold-light);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.light-btn:hover {
+  background: rgba(200,140,50,0.1);
+  box-shadow: 0 0 30px rgba(200,140,50,0.2);
+  transform: translateY(-1px);
+}
+
+/* Lantern display */
+.lantern-stage {
+  width: 100%;
+  max-width: 560px;
+  margin-top: 48px;
+  display: none;
+  animation: fadeUp 0.8s ease both;
+}
+
+.lantern-stage.visible { display: block; }
+
+.lantern-scene {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+  height: 280px;
+}
+
+/* The lantern */
+.lantern {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: sway 4s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+.lantern-string-top {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(180deg, rgba(180,140,60,0.6), rgba(180,140,60,0.3));
+}
+
+.lantern-body {
+  width: 90px;
+  height: 110px;
+  border-radius: 50% 50% 45% 45%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(220,100,30,0.5), 0 0 80px rgba(220,100,30,0.2), inset 0 0 30px rgba(255,160,50,0.3);
+}
+
+.lantern-inner {
+  position: absolute;
+  inset: 3px;
+  border-radius: 50% 50% 42% 42%;
+  background: radial-gradient(ellipse at 40% 40%, rgba(255,200,80,0.4) 0%, rgba(200,80,20,0.8) 60%, rgba(150,40,10,0.9) 100%);
+  animation: lanternGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes lanternGlow {
+  0% { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+
+.lantern-ribs {
+  position: absolute;
+  inset: 0;
+  border-radius: 50% 50% 45% 45%;
+}
+
+.lantern-rib {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(100,30,10,0.4);
+  transform-origin: top center;
+}
+
+.lantern-top-cap {
+  width: 50px;
+  height: 10px;
+  background: linear-gradient(180deg, #8b3a10, #6b2a08);
+  border-radius: 2px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.lantern-bottom-cap {
+  width: 40px;
+  height: 8px;
+  background: linear-gradient(180deg, #6b2a08, #4a1a05);
+  border-radius: 0 0 4px 4px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Name tag */
+.lantern-tag-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lantern-tag-string {
+  width: 1px;
+  height: 12px;
+  background: rgba(180,140,60,0.5);
+}
+
+.lantern-tag {
+  background: #c8dc40;
+  padding: 6px 10px;
+  min-width: 44px;
+  text-align: center;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.lantern-tag-name {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 11px;
+  color: #1a2a0a;
+  font-weight: 400;
+  display: block;
+  line-height: 1.4;
+}
+
+.lantern-tag-wish {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 9px;
+  color: #2a4010;
+  display: block;
+  line-height: 1.4;
+  opacity: 0.8;
+}
+
+/* Surrounding small lanterns */
+.surrounding-lanterns {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.mini-lantern {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.4;
+}
+
+.mini-string { width: 1px; height: 15px; background: rgba(180,140,60,0.3); }
+.mini-body {
+  width: 24px;
+  height: 28px;
+  border-radius: 50% 50% 45% 45%;
+  box-shadow: 0 0 8px rgba(200,80,20,0.4);
+}
+.mini-tag { width: 5px; height: 14px; background: rgba(200,220,60,0.4); margin-top: 2px; border-radius: 1px; }
+
+/* Message card */
+.wish-message {
+  background: rgba(15,10,6,0.85);
+  border: 1px solid rgba(180,120,40,0.25);
+  border-radius: 4px;
+  padding: 28px 32px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+}
+
+.wish-message::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.wish-quote {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text);
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+.wish-attribution {
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+/* Share buttons */
+.share-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.share-btn {
+  background: transparent;
+  border: 1px solid rgba(180,120,40,0.3);
+  border-radius: 999px;
+  padding: 8px 20px;
+  color: var(--muted);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.share-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold-light);
+  box-shadow: 0 0 16px rgba(200,140,50,0.15);
+}
+
+.light-another {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+  text-align: center;
+  transition: color 0.3s;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.light-another:hover { color: var(--text); }
+
+/* Floating particles */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(255,180,60,0.6);
+  animation: float linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20,12,8,0.95);
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  padding: 10px 24px;
+  color: var(--gold-light);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 100;
+}
+.toast.show { opacity: 1; }
+
+@media (max-width: 480px) {
+  .container { padding: 40px 16px 60px; }
+  h1 { font-size: 28px; }
+}
+</style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1">&lt;title&gt;Light a Lantern — Hyemyung&lt;/title&gt;</p>
-<p class="p1">&lt;link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&amp;family=Noto+Serif+KR:wght@300;400&amp;display=swap" rel="stylesheet"&gt;</p>
-<p class="p1">&lt;style&gt;</p>
-<p class="p1">* { margin: 0; padding: 0; box-sizing: border-box; }</p>
-<p class="p2"><br></p>
-<p class="p1">:root {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--bg: #0a0806;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--gold: #c9923a;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--gold-light: #e8b96a;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--red: #8b1a1a;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--red-glow: rgba(180, 60, 20, 0.4);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--paper: #f5e6c8;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--text: #f0e0c0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--muted: #9a8060;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--candle: #ff9933;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">html, body {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>min-height: 100vh;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: var(--bg);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Cormorant Garamond', Georgia, serif;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>overflow-x: hidden;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Temple background */</p>
-<p class="p1">.temple-bg {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: fixed;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>inset: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>z-index: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>overflow: hidden;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Ceiling pattern */</p>
-<p class="p1">.ceiling {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>top: 0; left: 0; right: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 45%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: linear-gradient(180deg, #1a0f08 0%, #0d0806 100%);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-bottom: 1px solid rgba(180,100,20,0.2);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Hanging lanterns in background */</p>
-<p class="p1">.bg-lanterns {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>top: 0; left: 0; right: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 45%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>justify-content: space-around;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>align-items: flex-start;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding: 0 10px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>flex-wrap: wrap;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.bg-lantern {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-top: -8px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.bg-lantern-string {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 1px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(180,140,60,0.4);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.bg-lantern-body {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 28px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 32px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 50% 50% 45% 45%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 0 12px var(--red-glow);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.bg-lantern-tag {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 18px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(200,220,80,0.5);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-top: 2px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 1px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Floor */</p>
-<p class="p1">.floor {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>bottom: 0; left: 0; right: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 40%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: linear-gradient(180deg, #0d0806 0%, #1a1008 60%, #221408 100%);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Candle row */</p>
-<p class="p1">.candles-row {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>bottom: 30%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>left: 0; right: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>gap: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding: 0 20px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.candle-wrap {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.candle-flame {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: var(--candle);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 50% 50% 30% 30%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 0 6px 2px rgba(255,153,51,0.6), 0 0 12px 4px rgba(255,100,0,0.3);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>animation: flicker 1.5s ease-in-out infinite alternate;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.candle-body {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: linear-gradient(180deg, #e8d8b0 0%, #c8b890 100%);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 1px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">@keyframes flicker {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>0% { transform: scaleX(1) scaleY(1) translateX(0); opacity: 1; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>25% { transform: scaleX(0.8) scaleY(1.1) translateX(-1px); opacity: 0.9; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>50% { transform: scaleX(1.1) scaleY(0.9) translateX(1px); opacity: 1; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>75% { transform: scaleX(0.9) scaleY(1.05) translateX(-0.5px); opacity: 0.95; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>100% { transform: scaleX(1.05) scaleY(1) translateX(0.5px); opacity: 1; }</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Ambient glow */</p>
-<p class="p1">.glow-bottom {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>bottom: 0; left: 20%; right: 20%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 35%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: radial-gradient(ellipse, rgba(180,80,20,0.12) 0%, transparent 70%);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>pointer-events: none;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.glow-candles {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>bottom: 28%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>left: 0; right: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 15%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: radial-gradient(ellipse, rgba(255,140,40,0.08) 0%, transparent 60%);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>pointer-events: none;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Main content */</p>
-<p class="p1">.container {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>z-index: 10;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>min-height: 100vh;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding: 60px 24px 80px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">header {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 48px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>animation: fadeDown 1.2s ease both;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.site-tag {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 11px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.4em;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--gold);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-transform: uppercase;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>opacity: 0.7;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">h1 {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: clamp(32px, 6vw, 52px);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 300;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.06em;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>line-height: 1.2;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 12px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">h1 em {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-style: italic;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--gold-light);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.subtitle {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 14px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--muted);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.1em;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>line-height: 1.8;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.divider {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 1px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: linear-gradient(180deg, transparent, var(--gold), transparent);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin: 0 auto 40px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Input section */</p>
-<p class="p1">.input-section {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>max-width: 480px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>animation: fadeUp 1s 0.3s ease both;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>opacity: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>animation-fill-mode: both;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.input-label {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--muted);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.12em;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: block;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.input-group {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>gap: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 16px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.input-group input, .input-group textarea {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(20,12,8,0.8);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border: 1px solid rgba(180,120,40,0.3);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding: 14px 18px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Cormorant Garamond', Georgia, serif;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.05em;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>outline: none;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transition: border-color 0.3s, box-shadow 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>backdrop-filter: blur(4px);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.input-group textarea {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>resize: none;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 80px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>line-height: 1.6;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.input-group input:focus, .input-group textarea:focus {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-color: var(--gold);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 0 20px rgba(200,140,50,0.15);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.input-group input::placeholder, .input-group textarea::placeholder {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: rgba(154,128,96,0.5);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-style: italic;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.light-btn {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: transparent;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border: 1px solid var(--gold);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding: 14px 40px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--gold-light);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Cormorant Garamond', Georgia, serif;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.12em;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transition: all 0.3s ease;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.light-btn:hover {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(200,140,50,0.1);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 0 30px rgba(200,140,50,0.2);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transform: translateY(-1px);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Lantern display */</p>
-<p class="p1">.lantern-stage {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>max-width: 560px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-top: 48px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>animation: fadeUp 0.8s ease both;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-stage.visible { display: block; }</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-scene {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 32px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 280px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* The lantern */</p>
-<p class="p1">.lantern {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>animation: sway 4s ease-in-out infinite;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transform-origin: top center;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">@keyframes sway {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>0%, 100% { transform: rotate(-2deg); }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>50% { transform: rotate(2deg); }</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-string-top {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 1px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: linear-gradient(180deg, rgba(180,140,60,0.6), rgba(180,140,60,0.3));</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-body {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 90px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 110px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 50% 50% 45% 45%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>overflow: hidden;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 0 40px rgba(220,100,30,0.5), 0 0 80px rgba(220,100,30,0.2), inset 0 0 30px rgba(255,160,50,0.3);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-inner {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>inset: 3px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 50% 50% 42% 42%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: radial-gradient(ellipse at 40% 40%, rgba(255,200,80,0.4) 0%, rgba(200,80,20,0.8) 60%, rgba(150,40,10,0.9) 100%);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>animation: lanternGlow 2s ease-in-out infinite alternate;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">@keyframes lanternGlow {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>0% { opacity: 0.85; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>100% { opacity: 1; }</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-ribs {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>inset: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 50% 50% 45% 45%;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-rib {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>top: 0; bottom: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 1px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(100,30,10,0.4);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transform-origin: top center;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-top-cap {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 50px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: linear-gradient(180deg, #8b3a10, #6b2a08);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 2px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>left: 50%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transform: translateX(-50%);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 2px 8px rgba(0,0,0,0.5);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-bottom-cap {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: linear-gradient(180deg, #6b2a08, #4a1a05);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 0 0 4px 4px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>bottom: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>left: 50%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transform: translateX(-50%);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Name tag */</p>
-<p class="p1">.lantern-tag-wrap {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-tag-string {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 1px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(180,140,60,0.5);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-tag {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: #c8dc40;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding: 6px 10px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>min-width: 44px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 2px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 2px 8px rgba(0,0,0,0.4);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-tag-name {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Noto Serif KR', serif;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 11px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: #1a2a0a;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 400;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: block;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>line-height: 1.4;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.lantern-tag-wish {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Noto Serif KR', serif;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 9px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: #2a4010;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: block;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>line-height: 1.4;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>opacity: 0.8;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Surrounding small lanterns */</p>
-<p class="p1">.surrounding-lanterns {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>inset: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>pointer-events: none;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.mini-lantern {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>opacity: 0.4;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.mini-string { width: 1px; height: 15px; background: rgba(180,140,60,0.3); }</p>
-<p class="p1">.mini-body {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 24px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 28px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 50% 50% 45% 45%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 0 8px rgba(200,80,20,0.4);</p>
-<p class="p1">}</p>
-<p class="p1">.mini-tag { width: 5px; height: 14px; background: rgba(200,220,60,0.4); margin-top: 2px; border-radius: 1px; }</p>
-<p class="p2"><br></p>
-<p class="p1">/* Message card */</p>
-<p class="p1">.wish-message {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(15,10,6,0.85);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border: 1px solid rgba(180,120,40,0.25);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding: 28px 32px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>backdrop-filter: blur(8px);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>overflow: hidden;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.wish-message::before {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>content: '';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>top: 0; left: 0; right: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 1px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: linear-gradient(90deg, transparent, var(--gold), transparent);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.wish-quote {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Cormorant Garamond', Georgia, serif;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-style: italic;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 17px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>line-height: 1.8;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>opacity: 0.9;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.wish-attribution {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--gold);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.1em;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>opacity: 0.7;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Share buttons */</p>
-<p class="p1">.share-row {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>gap: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-top: 24px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.share-btn {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: transparent;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border: 1px solid rgba(180,120,40,0.3);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 999px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding: 8px 20px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--muted);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Cormorant Garamond', Georgia, serif;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.06em;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transition: all 0.3s;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.share-btn:hover {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-color: var(--gold);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--gold-light);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 0 16px rgba(200,140,50,0.15);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.light-another {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: transparent;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--muted);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Cormorant Garamond', Georgia, serif;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.1em;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-top: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display: block;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transition: color 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-decoration: underline;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-underline-offset: 4px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.light-another:hover { color: var(--text); }</p>
-<p class="p2"><br></p>
-<p class="p1">/* Floating particles */</p>
-<p class="p1">.particles {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: fixed;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>inset: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>pointer-events: none;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>z-index: 1;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.particle {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width: 2px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height: 2px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 50%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(255,180,60,0.6);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>animation: float linear infinite;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">@keyframes float {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>0% { transform: translateY(100vh) translateX(0); opacity: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>10% { opacity: 1; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>90% { opacity: 0.5; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">@keyframes fadeDown {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>from { opacity: 0; transform: translateY(-20px); }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>to { opacity: 1; transform: translateY(0); }</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">@keyframes fadeUp {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>from { opacity: 0; transform: translateY(24px); }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>to { opacity: 1; transform: translateY(0); }</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.toast {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position: fixed;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>bottom: 32px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>left: 50%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transform: translateX(-50%);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(20,12,8,0.95);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border: 1px solid var(--gold);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding: 10px 24px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color: var(--gold-light);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.08em;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>opacity: 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transition: opacity 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>pointer-events: none;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>z-index: 100;</p>
-<p class="p1">}</p>
-<p class="p1">.toast.show { opacity: 1; }</p>
-<p class="p2"><br></p>
-<p class="p1">@media (max-width: 480px) {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.container { padding: 40px 16px 60px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>h1 { font-size: 28px; }</p>
-<p class="p1">}</p>
-<p class="p1">&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;!-- Temple atmosphere --&gt;</p>
-<p class="p1">&lt;div class="temple-bg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="ceiling"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="bg-lanterns" id="bgLanterns"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="floor"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="candles-row" id="candlesRow"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="glow-bottom"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="glow-candles"&gt;&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;!-- Floating particles --&gt;</p>
-<p class="p1">&lt;div class="particles" id="particles"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="site-tag"&gt;Hyemyung · Digital Sanctuary&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Light a&lt;br&gt;&lt;em&gt;Lantern&lt;/em&gt;&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle"&gt;When you are tired, when you want to give up —&lt;br&gt;come back here. Remember who you were today.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="input-section" id="inputSection"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="input-label"&gt;Your name &amp; wish&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="input-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;input type="text" id="nameInput" placeholder="Your name..." maxlength="20" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;textarea id="wishInput" placeholder="How are you feeling right now? What are you holding onto?"&gt;&lt;/textarea&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="light-btn" onclick="lightLantern()"&gt;🏮 Keep This Moment&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="lantern-stage" id="lanternStage"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="lantern-scene" id="lanternScene"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="surrounding-lanterns" id="surroundingLanterns"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lantern" id="myLantern"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lantern-string-top"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lantern-body"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="lantern-top-cap"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="lantern-inner"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="lantern-ribs" id="lanternRibs"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="lantern-bottom-cap"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lantern-tag-wrap"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="lantern-tag-string"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="lantern-tag"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="lantern-tag-name" id="tagName"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="lantern-tag-wish" id="tagWish"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="wish-message"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="wish-quote" id="wishQuote"&gt;&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="wish-attribution"&gt;— Hyemyung&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="share-row"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="share-btn" onclick="copyLink()"&gt;🔗 Copy Link&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="share-btn" onclick="shareTwitter()"&gt;𝕏 Share&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="light-another" onclick="resetForm()"&gt;Light another lantern&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="toast" id="toast"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;script&gt;</p>
-<p class="p1">const lanternColors = [</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ outer: 'linear-gradient(135deg, #8b1a1a, #c03020)', inner: 'radial-gradient(ellipse at 40% 40%, rgba(255,200,80,0.4) 0%, rgba(200,80,20,0.8) 60%, rgba(150,40,10,0.9) 100%)' },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ outer: 'linear-gradient(135deg, #1a4a8b, #2060c0)', inner: 'radial-gradient(ellipse at 40% 40%, rgba(180,220,255,0.4) 0%, rgba(40,100,200,0.8) 60%, rgba(20,60,150,0.9) 100%)' },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ outer: 'linear-gradient(135deg, #2a7a30, #40a050)', inner: 'radial-gradient(ellipse at 40% 40%, rgba(180,255,180,0.4) 0%, rgba(40,160,60,0.8) 60%, rgba(20,100,30,0.9) 100%)' },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ outer: 'linear-gradient(135deg, #7a4a1a, #c07030)', inner: 'radial-gradient(ellipse at 40% 40%, rgba(255,220,120,0.4) 0%, rgba(200,130,40,0.8) 60%, rgba(140,80,20,0.9) 100%)' },</p>
-<p class="p1">];</p>
-<p class="p2"><br></p>
-<p class="p1">const quotes = [</p>
-<p class="p1"><span class="Apple-converted-space">  </span>"This moment is now kept safe. When you are tired and ready to give up — come back here. The person who lit this lantern was real, and they were trying.",</p>
-<p class="p1"><span class="Apple-converted-space">  </span>"You don't need to know what comes next. You only need to remember that you were here, that you felt this, and that it mattered.",</p>
-<p class="p1"><span class="Apple-converted-space">  </span>"On the days that exhaust you — recall this light. It was lit by you, on a day when you still believed something was worth holding onto.",</p>
-<p class="p1"><span class="Apple-converted-space">  </span>"This is not a wish. This is a record. A quiet proof that today, you showed up for yourself.",</p>
-<p class="p1"><span class="Apple-converted-space">  </span>"You are already enduring more than most will ever see. This lantern is not a prayer for the future — it is a witness to who you are right now.",</p>
-<p class="p1"><span class="Apple-converted-space">  </span>"When the road ahead feels too long, look back at this moment. You were here. You were enough. You still are.",</p>
-<p class="p1">];</p>
-<p class="p2"><br></p>
-<p class="p1">function buildBackground() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const bgLanterns = document.getElementById('bgLanterns');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const colors = ['#8b1a1a','#c03020','#1a4a8b','#2a7a30','#7a3010','#c07030'];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>for (let i = 0; i &lt; 40; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const wrap = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrap.className = 'bg-lantern';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrap.style.marginTop = Math.random() * 20 + 'px';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const color = colors[Math.floor(Math.random() * colors.length)];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrap.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="bg-lantern-string"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="bg-lantern-body" style="background:${color}; opacity:${0.4 + Math.random()*0.4}"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="bg-lantern-tag"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>bgLanterns.appendChild(wrap);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const candlesRow = document.getElementById('candlesRow');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>for (let i = 0; i &lt; 18; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const wrap = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrap.className = 'candle-wrap';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const delay = Math.random() * 1.5;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const dur = 1 + Math.random() * 1;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrap.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="candle-flame" style="animation-delay:${delay}s; animation-duration:${dur}s"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="candle-body" style="height:${14+Math.random()*12}px"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>candlesRow.appendChild(wrap);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function buildParticles() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const container = document.getElementById('particles');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>for (let i = 0; i &lt; 15; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const p = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>p.className = 'particle';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>p.style.left = Math.random() * 100 + '%';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>p.style.animationDuration = (8 + Math.random() * 12) + 's';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>p.style.animationDelay = (Math.random() * 10) + 's';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>p.style.opacity = 0.3 + Math.random() * 0.4;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>container.appendChild(p);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function buildLanternRibs() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const ribs = document.getElementById('lanternRibs');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>for (let i = 0; i &lt; 6; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const rib = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>rib.className = 'lantern-rib';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>rib.style.left = (15 + i * 14) + '%';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ribs.appendChild(rib);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function buildSurroundingLanterns() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const container = document.getElementById('surroundingLanterns');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const positions = [</p>
-<p class="p1"><span class="Apple-converted-space">    </span>{left:'5%', top:'10px'}, {left:'15%', top:'0px'}, {left:'75%', top:'5px'},</p>
-<p class="p1"><span class="Apple-converted-space">    </span>{left:'85%', top:'0px'}, {left:'70%', top:'30px'}, {left:'20%', top:'25px'},</p>
-<p class="p1"><span class="Apple-converted-space">    </span>{left:'90%', top:'40px'}, {left:'2%', top:'50px'},</p>
-<p class="p1"><span class="Apple-converted-space">  </span>];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const colors = ['#8b1a1a','#1a4a8b','#2a7a30','#7a3010'];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>positions.forEach(pos =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const wrap = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrap.className = 'mini-lantern';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrap.style.left = pos.left;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrap.style.top = pos.top;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const color = colors[Math.floor(Math.random() * colors.length)];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrap.innerHTML = `&lt;div class="mini-string"&gt;&lt;/div&gt;&lt;div class="mini-body" style="background:${color}"&gt;&lt;/div&gt;&lt;div class="mini-tag"&gt;&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>container.appendChild(wrap);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function lightLantern() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const name = document.getElementById('nameInput').value.trim();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const reflection = document.getElementById('wishInput').value.trim();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>if (!name) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('nameInput').focus();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>showToast('Please enter your name');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const colorIdx = Math.floor(Math.random() * lanternColors.length);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const color = lanternColors[colorIdx];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const quote = quotes[Math.floor(Math.random() * quotes.length)];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('tagName').textContent = name;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('tagWish').textContent = wish ? (wish.length &gt; 16 ? wish.slice(0,16)+'...' : wish) : '';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('wishQuote').textContent = quote;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const body = document.querySelector('.lantern-body');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>body.style.background = color.outer;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const inner = document.querySelector('.lantern-inner');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>inner.style.background = color.inner;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('inputSection').style.display = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const stage = document.getElementById('lanternStage');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>stage.classList.add('visible');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>stage.style.animation = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>stage.offsetHeight;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>stage.style.animation = 'fadeUp 0.8s ease both';</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function resetForm() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('nameInput').value = '';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('wishInput').value = '';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('inputSection').style.display = 'block';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('lanternStage').classList.remove('visible');</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function copyLink() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>navigator.clipboard.writeText(window.location.href).then(() =&gt; showToast('✓ Link copied'));</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function shareTwitter() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const name = document.getElementById('tagName').textContent;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const text = `I lit a lantern for my wish at Hyemyung — a digital sanctuary rooted in Eastern wisdom. 🏮`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&amp;url=${encodeURIComponent('https://lylaj391xo.github.io/hyemyung/')}`, '_blank');</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function showToast(msg) {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const t = document.getElementById('toast');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>t.textContent = msg;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>t.classList.add('show');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>setTimeout(() =&gt; t.classList.remove('show'), 2000);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">buildBackground();</p>
-<p class="p1">buildParticles();</p>
-<p class="p1">buildLanternRibs();</p>
-<p class="p1">buildSurroundingLanterns();</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+<!-- Temple atmosphere -->
+<div class="temple-bg">
+  <div class="ceiling"></div>
+  <div class="bg-lanterns" id="bgLanterns"></div>
+  <div class="floor"></div>
+  <div class="candles-row" id="candlesRow"></div>
+  <div class="glow-bottom"></div>
+  <div class="glow-candles"></div>
+</div>
+
+<!-- Floating particles -->
+<div class="particles" id="particles"></div>
+
+<div class="container">
+  <header>
+    <p class="site-tag">Hyemyung · Digital Sanctuary</p>
+    <h1>Light a<br><em>Lantern</em></h1>
+    <div class="divider"></div>
+    <p class="subtitle">When you are tired, when you want to give up —<br>come back here. Remember who you were today.</p>
+  </header>
+
+  <div class="input-section" id="inputSection">
+    <span class="input-label">Your name & wish</span>
+    <div class="input-group">
+      <input type="text" id="nameInput" placeholder="Your name..." maxlength="20" />
+      <textarea id="wishInput" placeholder="How are you feeling right now? What are you holding onto?"></textarea>
+    </div>
+    <button class="light-btn" onclick="lightLantern()">🏮 Keep This Moment</button>
+  </div>
+
+  <div class="lantern-stage" id="lanternStage">
+    <div class="lantern-scene" id="lanternScene">
+      <div class="surrounding-lanterns" id="surroundingLanterns"></div>
+      <div class="lantern" id="myLantern">
+        <div class="lantern-string-top"></div>
+        <div class="lantern-body">
+          <div class="lantern-top-cap"></div>
+          <div class="lantern-inner"></div>
+          <div class="lantern-ribs" id="lanternRibs"></div>
+          <div class="lantern-bottom-cap"></div>
+        </div>
+        <div class="lantern-tag-wrap">
+          <div class="lantern-tag-string"></div>
+          <div class="lantern-tag">
+            <span class="lantern-tag-name" id="tagName"></span>
+            <span class="lantern-tag-wish" id="tagWish"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wish-message">
+      <p class="wish-quote" id="wishQuote"></p>
+      <p class="wish-attribution">— Hyemyung</p>
+    </div>
+
+    <div class="share-row">
+      <button class="share-btn" onclick="copyLink()">🔗 Copy Link</button>
+      <button class="share-btn" onclick="shareTwitter()">𝕏 Share</button>
+    </div>
+
+    <button class="light-another" onclick="resetForm()">Light another lantern</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const lanternColors = [
+  { outer: 'linear-gradient(135deg, #8b1a1a, #c03020)', inner: 'radial-gradient(ellipse at 40% 40%, rgba(255,200,80,0.4) 0%, rgba(200,80,20,0.8) 60%, rgba(150,40,10,0.9) 100%)' },
+  { outer: 'linear-gradient(135deg, #1a4a8b, #2060c0)', inner: 'radial-gradient(ellipse at 40% 40%, rgba(180,220,255,0.4) 0%, rgba(40,100,200,0.8) 60%, rgba(20,60,150,0.9) 100%)' },
+  { outer: 'linear-gradient(135deg, #2a7a30, #40a050)', inner: 'radial-gradient(ellipse at 40% 40%, rgba(180,255,180,0.4) 0%, rgba(40,160,60,0.8) 60%, rgba(20,100,30,0.9) 100%)' },
+  { outer: 'linear-gradient(135deg, #7a4a1a, #c07030)', inner: 'radial-gradient(ellipse at 40% 40%, rgba(255,220,120,0.4) 0%, rgba(200,130,40,0.8) 60%, rgba(140,80,20,0.9) 100%)' },
+];
+
+const quotes = [
+  "This moment is now kept safe. When you are tired and ready to give up — come back here. The person who lit this lantern was real, and they were trying.",
+  "You don't need to know what comes next. You only need to remember that you were here, that you felt this, and that it mattered.",
+  "On the days that exhaust you — recall this light. It was lit by you, on a day when you still believed something was worth holding onto.",
+  "This is not a wish. This is a record. A quiet proof that today, you showed up for yourself.",
+  "You are already enduring more than most will ever see. This lantern is not a prayer for the future — it is a witness to who you are right now.",
+  "When the road ahead feels too long, look back at this moment. You were here. You were enough. You still are.",
+];
+
+function buildBackground() {
+  const bgLanterns = document.getElementById('bgLanterns');
+  const colors = ['#8b1a1a','#c03020','#1a4a8b','#2a7a30','#7a3010','#c07030'];
+  for (let i = 0; i < 40; i++) {
+    const wrap = document.createElement('div');
+    wrap.className = 'bg-lantern';
+    wrap.style.marginTop = Math.random() * 20 + 'px';
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    wrap.innerHTML = `
+      <div class="bg-lantern-string"></div>
+      <div class="bg-lantern-body" style="background:${color}; opacity:${0.4 + Math.random()*0.4}"></div>
+      <div class="bg-lantern-tag"></div>
+    `;
+    bgLanterns.appendChild(wrap);
+  }
+
+  const candlesRow = document.getElementById('candlesRow');
+  for (let i = 0; i < 18; i++) {
+    const wrap = document.createElement('div');
+    wrap.className = 'candle-wrap';
+    const delay = Math.random() * 1.5;
+    const dur = 1 + Math.random() * 1;
+    wrap.innerHTML = `
+      <div class="candle-flame" style="animation-delay:${delay}s; animation-duration:${dur}s"></div>
+      <div class="candle-body" style="height:${14+Math.random()*12}px"></div>
+    `;
+    candlesRow.appendChild(wrap);
+  }
+}
+
+function buildParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 15; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.opacity = 0.3 + Math.random() * 0.4;
+    container.appendChild(p);
+  }
+}
+
+function buildLanternRibs() {
+  const ribs = document.getElementById('lanternRibs');
+  for (let i = 0; i < 6; i++) {
+    const rib = document.createElement('div');
+    rib.className = 'lantern-rib';
+    rib.style.left = (15 + i * 14) + '%';
+    ribs.appendChild(rib);
+  }
+}
+
+function buildSurroundingLanterns() {
+  const container = document.getElementById('surroundingLanterns');
+  const positions = [
+    {left:'5%', top:'10px'}, {left:'15%', top:'0px'}, {left:'75%', top:'5px'},
+    {left:'85%', top:'0px'}, {left:'70%', top:'30px'}, {left:'20%', top:'25px'},
+    {left:'90%', top:'40px'}, {left:'2%', top:'50px'},
+  ];
+  const colors = ['#8b1a1a','#1a4a8b','#2a7a30','#7a3010'];
+  positions.forEach(pos => {
+    const wrap = document.createElement('div');
+    wrap.className = 'mini-lantern';
+    wrap.style.left = pos.left;
+    wrap.style.top = pos.top;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    wrap.innerHTML = `<div class="mini-string"></div><div class="mini-body" style="background:${color}"></div><div class="mini-tag"></div>`;
+    container.appendChild(wrap);
+  });
+}
+
+function lightLantern() {
+  const name = document.getElementById('nameInput').value.trim();
+  const reflection = document.getElementById('wishInput').value.trim();
+
+  if (!name) {
+    document.getElementById('nameInput').focus();
+    showToast('Please enter your name');
+    return;
+  }
+
+  const colorIdx = Math.floor(Math.random() * lanternColors.length);
+  const color = lanternColors[colorIdx];
+  const quote = quotes[Math.floor(Math.random() * quotes.length)];
+
+  document.getElementById('tagName').textContent = name;
+  document.getElementById('tagWish').textContent = wish ? (wish.length > 16 ? wish.slice(0,16)+'...' : wish) : '';
+  document.getElementById('wishQuote').textContent = quote;
+
+  const body = document.querySelector('.lantern-body');
+  body.style.background = color.outer;
+  const inner = document.querySelector('.lantern-inner');
+  inner.style.background = color.inner;
+
+  document.getElementById('inputSection').style.display = 'none';
+  const stage = document.getElementById('lanternStage');
+  stage.classList.add('visible');
+  stage.style.animation = 'none';
+  stage.offsetHeight;
+  stage.style.animation = 'fadeUp 0.8s ease both';
+}
+
+function resetForm() {
+  document.getElementById('nameInput').value = '';
+  document.getElementById('wishInput').value = '';
+  document.getElementById('inputSection').style.display = 'block';
+  document.getElementById('lanternStage').classList.remove('visible');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => showToast('✓ Link copied'));
+}
+
+function shareTwitter() {
+  const name = document.getElementById('tagName').textContent;
+  const text = `I lit a lantern for my wish at Hyemyung — a digital sanctuary rooted in Eastern wisdom. 🏮`;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent('https://lylaj391xo.github.io/hyemyung/')}`, '_blank');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+buildBackground();
+buildParticles();
+buildLanternRibs();
+buildSurroundingLanterns();
+</script>
 </body>
 </html>
