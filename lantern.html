@@ -582,6 +582,37 @@ h1 em {
 }
 .toast.show { opacity: 1; }
 
+.past-section {
+  width: 100%;
+  max-width: 480px;
+  margin-top: 32px;
+  display: none;
+  animation: fadeUp 0.8s ease both;
+}
+.past-title {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.past-item {
+  background: rgba(15,10,6,0.7);
+  border: 1px solid rgba(180,120,40,0.15);
+  border-radius: 4px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+.past-item:hover { border-color: rgba(180,120,40,0.4); }
+.past-date { font-size: 10px; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 4px; opacity: 0.7; }
+.past-name { font-size: 15px; color: var(--text); margin-bottom: 4px; }
+.past-reflection { font-size: 13px; color: var(--muted); margin-bottom: 6px; font-style: italic; }
+.past-quote { font-size: 11px; color: rgba(154,128,96,0.6); line-height: 1.5; }
+
+
 @media (max-width: 480px) {
   .container { padding: 40px 16px 60px; }
   h1 { font-size: 28px; }
@@ -654,6 +685,12 @@ h1 em {
     <button class="light-another" onclick="resetForm()">Light another lantern</button>
   </div>
 </div>
+
+
+  <div class="past-section" id="pastSection">
+    <p class="past-title">Your lanterns</p>
+    <div id="pastList"></div>
+  </div>
 
 <div class="toast" id="toast"></div>
 
@@ -746,30 +783,60 @@ function buildSurroundingLanterns() {
   });
 }
 
+function saveLantern(name, reflection, quote, colorIdx) {
+  const records = JSON.parse(localStorage.getItem('hyemyung_lanterns') || '[]');
+  records.unshift({ name, reflection, quote, colorIdx, date: new Date().toISOString() });
+  if (records.length > 20) records.pop();
+  localStorage.setItem('hyemyung_lanterns', JSON.stringify(records));
+}
+
+function loadPastLanterns() {
+  const records = JSON.parse(localStorage.getItem('hyemyung_lanterns') || '[]');
+  if (records.length === 0) return;
+  const section = document.getElementById('pastSection');
+  const list = document.getElementById('pastList');
+  list.innerHTML = '';
+  records.forEach(r => {
+    const date = new Date(r.date);
+    const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const div = document.createElement('div');
+    div.className = 'past-item';
+    div.innerHTML = `<div class="past-date">${dateStr}</div><div class="past-name">${r.name}</div><div class="past-reflection">${r.reflection || '—'}</div><div class="past-quote">"${r.quote.slice(0,60)}..."</div>`;
+    div.onclick = () => showPastLantern(r);
+    list.appendChild(div);
+  });
+  section.style.display = 'block';
+}
+
+function showPastLantern(r) {
+  const color = lanternColors[r.colorIdx] || lanternColors[0];
+  document.getElementById('tagName').textContent = r.name;
+  document.getElementById('tagWish').textContent = r.reflection ? (r.reflection.length > 16 ? r.reflection.slice(0,16)+'...' : r.reflection) : '';
+  document.getElementById('wishQuote').textContent = r.quote;
+  document.querySelector('.lantern-body').style.background = color.outer;
+  document.querySelector('.lantern-inner').style.background = color.inner;
+  document.getElementById('inputSection').style.display = 'none';
+  document.getElementById('pastSection').style.display = 'none';
+  const stage = document.getElementById('lanternStage');
+  stage.classList.add('visible');
+  stage.style.animation = 'fadeUp 0.8s ease both';
+}
+
 function lightLantern() {
   const name = document.getElementById('nameInput').value.trim();
   const reflection = document.getElementById('wishInput').value.trim();
-
-  if (!name) {
-    document.getElementById('nameInput').focus();
-    showToast('Please enter your name');
-    return;
-  }
-
+  if (!name) { document.getElementById('nameInput').focus(); showToast('Please enter your name'); return; }
   const colorIdx = Math.floor(Math.random() * lanternColors.length);
   const color = lanternColors[colorIdx];
   const quote = quotes[Math.floor(Math.random() * quotes.length)];
-
+  saveLantern(name, reflection, quote, colorIdx);
   document.getElementById('tagName').textContent = name;
   document.getElementById('tagWish').textContent = reflection ? (reflection.length > 16 ? reflection.slice(0,16)+'...' : reflection) : '';
   document.getElementById('wishQuote').textContent = quote;
-
-  const body = document.querySelector('.lantern-body');
-  body.style.background = color.outer;
-  const inner = document.querySelector('.lantern-inner');
-  inner.style.background = color.inner;
-
+  document.querySelector('.lantern-body').style.background = color.outer;
+  document.querySelector('.lantern-inner').style.background = color.inner;
   document.getElementById('inputSection').style.display = 'none';
+  document.getElementById('pastSection').style.display = 'none';
   const stage = document.getElementById('lanternStage');
   stage.classList.add('visible');
   stage.style.animation = 'none';
@@ -782,6 +849,7 @@ function resetForm() {
   document.getElementById('wishInput').value = '';
   document.getElementById('inputSection').style.display = 'block';
   document.getElementById('lanternStage').classList.remove('visible');
+  loadPastLanterns();
 }
 
 function copyLink() {
@@ -801,6 +869,7 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2000);
 }
 
+loadPastLanterns();
 buildBackground();
 buildParticles();
 buildLanternRibs();
