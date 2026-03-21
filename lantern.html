@@ -585,17 +585,18 @@ h1 em {
 .past-section {
   width: 100%;
   max-width: 480px;
-  margin-top: 32px;
+  margin-top: 40px;
   display: none;
   animation: fadeUp 0.8s ease both;
 }
 .past-title {
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 0.2em;
-  color: var(--muted);
+  color: var(--gold);
   text-align: center;
   text-transform: uppercase;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  opacity: 0.7;
 }
 .past-item {
   background: rgba(15,10,6,0.7);
@@ -651,6 +652,11 @@ h1 em {
     <button class="light-btn" onclick="lightLantern()">🏮 Keep This Moment</button>
   </div>
 
+  <div class="past-section" id="pastSection">
+    <p class="past-title">Your lanterns</p>
+    <div id="pastList"></div>
+  </div>
+
   <div class="lantern-stage" id="lanternStage">
     <div class="lantern-scene" id="lanternScene">
       <div class="surrounding-lanterns" id="surroundingLanterns"></div>
@@ -686,11 +692,6 @@ h1 em {
   </div>
 </div>
 
-
-  <div class="past-section" id="pastSection">
-    <p class="past-title">Your lanterns</p>
-    <div id="pastList"></div>
-  </div>
 
 <div class="toast" id="toast"></div>
 
