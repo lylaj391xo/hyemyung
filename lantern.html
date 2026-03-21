@@ -761,7 +761,7 @@ function lightLantern() {
   const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
   document.getElementById('tagName').textContent = name;
-  document.getElementById('tagWish').textContent = wish ? (wish.length > 16 ? wish.slice(0,16)+'...' : wish) : '';
+  document.getElementById('tagWish').textContent = reflection ? (reflection.length > 16 ? reflection.slice(0,16)+'...' : reflection) : '';
   document.getElementById('wishQuote').textContent = quote;
 
   const body = document.querySelector('.lantern-body');
