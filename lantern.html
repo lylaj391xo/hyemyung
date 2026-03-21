@@ -582,6 +582,54 @@ h1 em {
 }
 .toast.show { opacity: 1; }
 
+.countdown-wrap {
+  margin-top: 16px;
+  text-align: center;
+}
+.countdown-bar-bg {
+  width: 100%;
+  height: 2px;
+  background: rgba(180,120,40,0.15);
+  border-radius: 1px;
+  margin-bottom: 10px;
+}
+.countdown-bar {
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 1px;
+  transition: width 0.5s ease;
+}
+.countdown-text {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+.countdown-text span {
+  color: var(--gold-light);
+  font-size: 13px;
+}
+.preserve-btn {
+  background: transparent;
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  padding: 10px 24px;
+  color: var(--gold-light);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 12px;
+  display: inline-block;
+  text-decoration: none;
+}
+.preserve-btn:hover {
+  background: rgba(200,140,50,0.1);
+  box-shadow: 0 0 20px rgba(200,140,50,0.2);
+}
+
+
 .past-section {
   width: 100%;
   max-width: 480px;
@@ -683,6 +731,14 @@ h1 em {
       <p class="wish-attribution">— Hyemyung</p>
     </div>
 
+
+    <div class="countdown-wrap" id="countdownWrap" style="display:none;">
+      <div class="countdown-bar-bg">
+        <div class="countdown-bar" id="countdownBar" style="width:100%"></div>
+      </div>
+      <p class="countdown-text">This light will fade in <span id="daysLeft">7</span> days</p>
+      <a class="preserve-btn" href="#" onclick="showPreserveToast(); return false;">🕯 Preserve This Light</a>
+    </div>
     <div class="share-row">
       <button class="share-btn" onclick="copyLink()">🔗 Copy Link</button>
       <button class="share-btn" onclick="shareTwitter()">𝕏 Share</button>
@@ -784,6 +840,28 @@ function buildSurroundingLanterns() {
   });
 }
 
+
+function showCountdown(savedDate) {
+  const now = new Date();
+  const saved = new Date(savedDate);
+  const diff = Math.floor((now - saved) / (1000 * 60 * 60 * 24));
+  const daysLeft = Math.max(0, 7 - diff);
+  const pct = (daysLeft / 7) * 100;
+
+  document.getElementById('daysLeft').textContent = daysLeft;
+  document.getElementById('countdownBar').style.width = pct + '%';
+  document.getElementById('countdownWrap').style.display = 'block';
+
+  if (daysLeft === 0) {
+    document.getElementById('daysLeft').textContent = 'less than 1';
+    document.getElementById('countdownBar').style.background = '#c03020';
+  }
+}
+
+function showPreserveToast() {
+  showToast('Preservation feature coming soon 🏮');
+}
+
 function saveLantern(name, reflection, quote, colorIdx) {
   const records = JSON.parse(localStorage.getItem('hyemyung_lanterns') || '[]');
   records.unshift({ name, reflection, quote, colorIdx, date: new Date().toISOString() });
@@ -821,6 +899,7 @@ function showPastLantern(r) {
   const stage = document.getElementById('lanternStage');
   stage.classList.add('visible');
   stage.style.animation = 'fadeUp 0.8s ease both';
+  showCountdown(r.date);
 }
 
 function lightLantern() {
@@ -843,6 +922,7 @@ function lightLantern() {
   stage.style.animation = 'none';
   stage.offsetHeight;
   stage.style.animation = 'fadeUp 0.8s ease both';
+  showCountdown(new Date().toISOString());
 }
 
 function resetForm() {
