@@ -31,7 +31,6 @@
     overflow-x: hidden;
   }
 
-  /* Starfield background */
   #hyemyung-app::before {
     content: '';
     position: fixed;
@@ -51,7 +50,6 @@
     z-index: 0;
   }
 
-  /* Nebula glow */
   #hyemyung-app::after {
     content: '';
     position: fixed;
@@ -72,7 +70,6 @@
     padding: 60px 24px 100px;
   }
 
-  /* Header */
   header {
     text-align: center;
     margin-bottom: 64px;
@@ -118,7 +115,6 @@
     margin: 24px auto;
   }
 
-  /* Year input */
   .year-input-section {
     text-align: center;
     margin-bottom: 48px;
@@ -190,7 +186,6 @@
     letter-spacing: 0.08em;
   }
 
-  /* Guardian illustration */
   .guardian-illustration {
     width: 100%;
     border-radius: 16px;
@@ -215,7 +210,6 @@
     letter-spacing: 0.05em;
   }
 
-  /* Content card */
   .content-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -315,7 +309,6 @@
     line-height: 2;
   }
 
-  /* Empty state */
   .empty-state {
     text-align: center;
     padding: 60px 24px;
@@ -338,7 +331,6 @@
     line-height: 1.8;
   }
 
-  /* Footer */
   footer {
     text-align: center;
     margin-top: 80px;
@@ -350,7 +342,6 @@
     animation: fadeUp 1s 0.6s ease both;
   }
 
-  /* Crescent Moon */
   .crescent-moon {
     position: fixed;
     bottom: 40px;
@@ -370,7 +361,6 @@
     100% { opacity: 1;   filter: drop-shadow(0 0 12px rgba(245, 217, 122, 0.9)); }
   }
 
-  /* Animations */
   @keyframes fadeDown {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -425,97 +415,6 @@
 
   .copy-toast.show { opacity: 1; }
 
-
-  .meditation-section {
-    margin-top: 80px;
-    padding: 60px 20px;
-    text-align: center;
-    animation: fadeUp 1s 0.8s ease both;
-  }
-
-  .med-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    color: var(--gold);
-    letter-spacing: 0.12em;
-    margin-bottom: 8px;
-  }
-
-  .med-subtitle {
-    font-size: 13px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    margin-bottom: 48px;
-  }
-
-  .sound-grid {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 56px;
-  }
-
-  .sound-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px 28px;
-    cursor: pointer;
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    width: 130px;
-    transition: all 0.3s ease;
-    font-family: 'Noto Serif KR', serif;
-  }
-
-  .sound-btn:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 20px var(--glow);
-    transform: translateY(-2px);
-  }
-
-  .sound-btn.active {
-    border-color: var(--gold);
-    box-shadow: 0 0 24px rgba(212, 175, 106, 0.3);
-    background: rgba(212, 175, 106, 0.08);
-  }
-
-  .sound-icon { font-size: 28px; }
-  .sound-label { font-size: 14px; color: var(--text); }
-  .sound-sublabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
-  .sound-status { font-size: 12px; color: var(--accent2); margin-top: 4px; }
-
-  /* Breathing Circle */
-  .breath-guide {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .breath-circle {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(155,114,255,0.3), rgba(155,114,255,0.05));
-    border: 1px solid rgba(155,114,255,0.3);
-    transition: transform 4s ease-in-out, opacity 0.5s;
-  }
-
-  .breath-circle.breathing {
-    animation: breathe 8s ease-in-out infinite;
-  }
-
-  @keyframes breathe {
-    0%   { transform: scale(1);    opacity: 0.5; }
-    50%  { transform: scale(2.2);  opacity: 1; }
-    100% { transform: scale(1);    opacity: 0.5; }
-  }
-
   .share-btn {
     display: inline-flex;
     align-items: center;
@@ -541,10 +440,8 @@
   }
 
   @media (max-width: 480px) {
-    .zodiac-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .content-card { padding: 32px 24px; }
     .guardian-header { flex-direction: column; text-align: center; }
-    .sound-btn { width: 100px; padding: 18px 16px; }
   }
 </style>
 </head>
@@ -567,12 +464,10 @@
     <p class="input-hint">Enter your birth year to meet your guardian spirit</p>
   </div>
 
-  <!-- Empty state -->
   <div class="empty-state" id="emptyState">
     <p>Choose your sign above<br>and your guardian's story will unfold</p>
   </div>
 
-  <!-- Content cards -->
   <div class="content-card" id="card-rat">
     <img class="guardian-illustration" src="https://i.postimg.cc/Dz49WD92/jwi.png" alt="Guardian of the Rat" />
     <div class="guardian-header">
@@ -813,39 +708,6 @@
     </div>
   </div>
 
-  <!-- Meditation Section -->
-  <div class="meditation-section">
-    <div class="divider"></div>
-    <div class="med-title">🎋 Meditation Space</div>
-    <div class="med-subtitle">Let the sounds guide you inward</div>
-
-    <div class="sound-grid">
-      <button class="sound-btn" onclick="toggleSound('moktak')" id="btn-moktak">
-        <span class="sound-icon">🪘</span>
-        <span class="sound-label">목탁</span>
-        <span class="sound-sublabel">Wooden Bell</span>
-        <span class="sound-status" id="status-moktak">▶</span>
-      </button>
-      <button class="sound-btn" onclick="toggleSound('bamboo')" id="btn-bamboo">
-        <span class="sound-icon">🎋</span>
-        <span class="sound-label">대나무숲</span>
-        <span class="sound-sublabel">Bamboo Forest</span>
-        <span class="sound-status" id="status-bamboo">▶</span>
-      </button>
-      <button class="sound-btn" onclick="toggleSound('bell')" id="btn-bell">
-        <span class="sound-icon">🔔</span>
-        <span class="sound-label">범종</span>
-        <span class="sound-sublabel">Temple Bell</span>
-        <span class="sound-status" id="status-bell">▶</span>
-      </button>
-    </div>
-
-    <div class="breath-guide" id="breathGuide">
-      <div class="breath-circle" id="breathCircle"></div>
-      <div class="breath-text" id="breathText">Breathe with me</div>
-    </div>
-  </div>
-
   <footer>
     <div class="divider"></div>
     <div class="share-wrap">
@@ -872,7 +734,6 @@
   };
 
   function getZodiac(year) {
-    // 1900 = Rat
     return zodiacOrder[(year - 1900) % 12];
   }
 
@@ -900,7 +761,6 @@
 
     const card = document.getElementById('card-' + sign);
     if (card) {
-      // Insert badge if not already there
       let badge = card.querySelector('.zodiac-badge');
       if (!badge) {
         badge = document.createElement('div');
@@ -915,7 +775,6 @@
       card.style.animation = 'fadeUp 0.6s ease both';
       setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
 
-      // Share button
       let shareBtn = card.querySelector('.share-btn');
       if (!shareBtn) {
         shareBtn = document.createElement('a');
@@ -946,134 +805,20 @@
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   }
 
-  // ── Meditation Sounds ──
-  let audioCtx = null;
-  const activeSounds = {};
-
-  function getAudioCtx() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    return audioCtx;
-  }
-
-  function playMoktak() {
-    // Repeating wooden moktak thud
-    const interval = setInterval(() => {
-      const osc = getAudioCtx().createOscillator();
-      const gain = getAudioCtx().createGain();
-      const now = getAudioCtx().currentTime;
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(280, now);
-      osc.frequency.exponentialRampToValueAtTime(220, now + 0.3);
-      gain.gain.setValueAtTime(0.35, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
-      osc.connect(gain); gain.connect(getAudioCtx().destination);
-      osc.start(now); osc.stop(now + 0.9);
-    }, 2200);
-    return { stop: () => clearInterval(interval) };
-  }
-
-  function playBamboo() {
-    // Rustling bamboo wind — layered noise
-    const bufferSize = getAudioCtx().sampleRate * 2;
-    const buffer = getAudioCtx().createBuffer(1, bufferSize, getAudioCtx().sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-
-    function makeRustle() {
-      const source = getAudioCtx().createBufferSource();
-      source.buffer = buffer;
-      source.loop = true;
-      const filter = getAudioCtx().createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.value = 800 + Math.random() * 400;
-      filter.Q.value = 0.8;
-      const gain = getAudioCtx().createGain();
-      gain.gain.setValueAtTime(0.04, getAudioCtx().currentTime);
-      source.connect(filter); filter.connect(gain); gain.connect(getAudioCtx().destination);
-      source.start();
-      return source;
-    }
-    const s1 = makeRustle(), s2 = makeRustle();
-    return { stop: () => { s1.stop(); s2.stop(); } };
-  }
-
-  function playBell() {
-    // Deep temple bell gong every ~6 seconds
-    const interval = setInterval(() => {
-      const now = getAudioCtx().currentTime;
-      [80, 160, 240, 320].forEach((freq, i) => {
-        const osc = getAudioCtx().createOscillator();
-        const gain = getAudioCtx().createGain();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.18 / (i + 1), now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 5);
-        osc.connect(gain); gain.connect(getAudioCtx().destination);
-        osc.start(now); osc.stop(now + 5);
-      });
-    }, 6500);
-    return { stop: () => clearInterval(interval) };
-  }
-
-  const soundMakers = { moktak: playMoktak, bamboo: playBamboo, bell: playBell };
-  const breathPhrases = ['Breathe in...', 'Hold gently...', 'Breathe out...', 'Rest...'];
-  let breathInterval = null;
-  let breathIdx = 0;
-
-  function startBreathing() {
-    if (breathInterval) return;
-    document.getElementById('breathCircle').classList.add('breathing');
-    breathInterval = setInterval(() => {
-      breathIdx = (breathIdx + 1) % breathPhrases.length;
-      document.getElementById('breathText').textContent = breathPhrases[breathIdx];
-    }, 2000);
-  }
-
-  function stopBreathing() {
-    if (Object.keys(activeSounds).length > 0) return;
-    clearInterval(breathInterval);
-    breathInterval = null;
-    document.getElementById('breathCircle').classList.remove('breathing');
-    document.getElementById('breathText').textContent = 'Breathe with me';
-  }
-
-  function toggleSound(name) {
-    if (getAudioCtx().state === 'suspended') getAudioCtx().resume();
-    const btn = document.getElementById('btn-' + name);
-    const status = document.getElementById('status-' + name);
-    if (activeSounds[name]) {
-      activeSounds[name].stop();
-      delete activeSounds[name];
-      btn.classList.remove('active');
-      status.textContent = '▶';
-      stopBreathing();
-    } else {
-      activeSounds[name] = soundMakers[name]();
-      btn.classList.add('active');
-      status.textContent = '■';
-      startBreathing();
-    }
-  }
-  // ──────────────────────────────────────────────────────────────
-
-
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('birthYear').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') findGuardian();
     });
   });
 </script>
+
 <div style="text-align:center; padding: 3rem 1rem;">
   <a href="https://hyemyung.yrock391.com" 
      target="_blank"
      style="display:inline-block; padding: 14px 32px; background: #1a1714; color: #faf8f4; font-family: 'EB Garamond', Georgia, serif; font-size: 16px; letter-spacing: 0.1em; text-decoration: none; border-radius: 2px;">
     Talk to Hyemyung
   </a>
-</div><div style="text-align:center; padding: 1rem 1rem 2rem;">
-  <a href="https://lylaj391xo.github.io/hyemyung/lantern.html" 
-     target="_blank"
-     style="display:inline-block; padding: 12px 28px; background: transparent; color: #b89a5a; font-family: 'EB Garamond', Georgia, serif; font-size: 14px; letter-spacing: 0.1em; text-decoration: none; border: 0.5px solid #b89a5a; border-radius: 2px;">
-    🏮 Keep This Moment
-  </a>
-</div></body>
+</div>
+
+</body>
 </html>
